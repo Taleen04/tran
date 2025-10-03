@@ -12,7 +12,7 @@ class CancelRequestUseCase implements UseCase<CancelRequestResponseEntity, Cance
   Future<CancelRequestResponseEntity> call(CancelRequestParams params) async {
     return await _repository.cancelRequest(
       requestId: params.requestId,
-      evidencePhotos: params.evidencePhotos,
+      photos: params.evidencePhotos,
       reason: params.reason,
       notes: params.notes,
     );

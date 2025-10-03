@@ -25,13 +25,16 @@ class RequestEntity {
   final bool needsAdditionalDriver;
   final DateTime? createdAt;
   final bool isUrgent;
+  final String currentStatus;
+  final Map<String, String> currentStatusTypes; 
   final bool isTimedOut;
   final bool acceptanceTimedOut;
   final int rejectionCount;
   final bool canAccept;
   final double? estimatedDistance;
   final double? estimatedDuration;
-   final List<int> driverIds;
+  final List<int> driverIds;
+
 
   RequestEntity({
     required this.id,
@@ -41,6 +44,8 @@ class RequestEntity {
     required this.destination,
     required this.vehicleType,
     required this.passengers,
+    required this.currentStatus,
+    required this.currentStatusTypes,
     required this.bags,
     this.notes,
     required this.minutesRemaining,
@@ -57,8 +62,7 @@ class RequestEntity {
     required this.canAccept,
     this.estimatedDistance,
     this.estimatedDuration,
-     required this.driverIds,
-   
+    required this.driverIds,
   });
 }
 

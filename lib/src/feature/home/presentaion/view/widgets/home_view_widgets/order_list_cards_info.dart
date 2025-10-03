@@ -319,7 +319,7 @@ class _OrderListCardsInfoState extends State<OrderListCardsInfo> {
                
             // زر سحب الطلب (يظهر فقط للطلبات المقبولة من سائق آخر)
           if ((widget.requestStatus?.status.toLowerCase() ?? '') == 'accepted' &&
-    !(widget.requestStatus?.isAcceptedByCurrentDriver ?? false)&&!(widget.order.driverIds.contains(widget.staff.id)))
+    !(widget.requestStatus?.isAcceptedByCurrentDriver ?? false)&& !(widget.order.driverIds.contains(widget.staff.id)))
   _buildTakeoverButton(context),
               
             const SizedBox(width: 15),
@@ -398,6 +398,11 @@ class _OrderListCardsInfoState extends State<OrderListCardsInfo> {
             statItem(
               Icon(Icons.group, color: AppColors.textSecondary),
               widget.order.passengers.toString(),
+            ),
+              const SizedBox(width: 15),
+            statItem(
+              widget.order.vehicleType=='car'?Icon(Icons.directions_car, color: AppColors.textSecondary):Icon(Icons.directions_bus, color: AppColors.textSecondary),
+               " "
             ),
             const SizedBox(width: 15),
             statItem(

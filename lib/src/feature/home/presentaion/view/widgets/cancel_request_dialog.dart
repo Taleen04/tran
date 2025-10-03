@@ -254,7 +254,19 @@ class _CancelRequestDialogState extends State<CancelRequestDialog> {
                     ],
                   ),
                 ),
-
+              if(_selectedReason==CancellationReason.clientNotFound)...[
+                if(_errorMessage!=null)...[
+                  Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.all(16),
+                  child: Text(_errorMessage!+"يجب الانتظار 3 دقيقة أخرى قبل الإلغاء لهذا السبب", style: AppTextStyling.font14W500TextInter.copyWith(
+                            color: Colors.red[700],
+                            fontWeight: FontWeight.w500,
+                          ),),
+                  ),
+                ]
+              ],
               // Scrollable content
               Expanded(
                 child: SingleChildScrollView(
@@ -758,8 +770,8 @@ class _CancelRequestDialogState extends State<CancelRequestDialog> {
         return 'حمولة غير مناسبة';
       case CancellationReason.clientNotFound:
         return 'العميل غير موجود';
-      case CancellationReason.weatherConditions:
-        return 'ظروف الطقس';
+      // case CancellationReason.weatherConditions:
+      //   return 'ظروف الطقس';
       case CancellationReason.other:
         return 'أخرى';
     }

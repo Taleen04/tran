@@ -30,7 +30,7 @@ class CancelRequestDataSourceImpl implements CancelRequestDataSource {
       for (int i = 0; i < evidencePhotos.length; i++) {
         final file = evidencePhotos[i];
         formData.files.add(MapEntry(
-          'evidence_photos',
+          'photos[]',
           await MultipartFile.fromFile(
             file.path,
             filename: 'evidence_photo_$i.jpg',
@@ -48,6 +48,7 @@ class CancelRequestDataSourceImpl implements CancelRequestDataSource {
       final response = await ApiClient.dio.post(
         ApiConstants.cancelRequest(requestId),
         data: formData,
+        options: Options(contentType: 'multipart/form-data'),
       );
       
       if (response.statusCode == 200) {

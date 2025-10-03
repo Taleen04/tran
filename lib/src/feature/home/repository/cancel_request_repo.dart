@@ -6,7 +6,7 @@ import 'package:ai_transport/src/feature/home/domain/entities/cancel_request_ent
 abstract class CancelRequestRepository {
   Future<CancelRequestResponseEntity> cancelRequest({
     required int requestId,
-    required List<File> evidencePhotos,
+    required List<File> photos,
     required CancellationReason reason,
     String? notes,
   });
@@ -20,7 +20,7 @@ class CancelRequestRepositoryImpl implements CancelRequestRepository {
   @override
   Future<CancelRequestResponseEntity> cancelRequest({
     required int requestId,
-    required List<File> evidencePhotos,
+    required List<File> photos,
     required CancellationReason reason,
     String? notes,
   }) async {
@@ -29,7 +29,7 @@ class CancelRequestRepositoryImpl implements CancelRequestRepository {
       
       final result = await _dataSource.cancelRequest(
         requestId: requestId,
-        evidencePhotos: evidencePhotos,
+        evidencePhotos: photos,
         reason: reason,
         notes: notes,
       );
