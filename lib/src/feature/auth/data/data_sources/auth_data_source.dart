@@ -13,11 +13,12 @@ import 'package:dio/dio.dart';
 class AuthDataSource {
   //convert models to json and call api
   Future<LoginResponse?> login(
-    String phone, String password, String deviceName,  context) async {
+    String phone, String password, String deviceName, String fcm, context) async {
   final data = {
     'phone': phone,
     'password': password,
-    'device_name': deviceName
+    'device_name': deviceName,
+    "fcm" : fcm
   };
 
   try {

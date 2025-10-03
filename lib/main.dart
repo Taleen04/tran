@@ -35,6 +35,7 @@ import 'package:ai_transport/src/feature/vehicle/repository/vehicle_check_reposi
 import 'package:ai_transport/src/feature/calender/presentation/view_model/bloc/calender_bloc.dart';
 import 'package:ai_transport/src/feature/calender/presentation/repo/calender_repo.dart';
 import 'package:ai_transport/src/feature/calender/data/data_sourse/calender_data_sourse.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
@@ -48,7 +49,16 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPrefHelper.init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  //SharedPrefHelper.getString(StorageKeys.current_status);
+
+  await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
   runApp(
     DevicePreview(enabled: !kReleaseMode, builder: (context) => const MyApp()),
   );

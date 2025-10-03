@@ -6,6 +6,7 @@ class ChatListHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -27,57 +28,34 @@ class ChatListHeader extends StatelessWidget {
           child: Column(
             children: [
               // Action buttons
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Search button
-                  GestureDetector(
-                    onTap: () {
-                      // Handle search
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.3),
-                          width: 1,
-                        ),
-                      ),
-                      child: const Icon(
-                        Icons.search,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-
-                  // More options button
-                  GestureDetector(
-                    onTap: () {
-                      // Handle more options
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.3),
-                          width: 1,
-                        ),
-                      ),
-                      child: const Icon(
-                        Icons.more_vert,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 25),
+              // Row(
+              //   children: [
+              //     // Search button
+              //     GestureDetector(
+              //       onTap: () {
+              //         // Handle search
+              //       },
+              //       child: Container(
+              //         padding: const EdgeInsets.all(12),
+              //         decoration: BoxDecoration(
+              //           color: Colors.white.withOpacity(0.2),
+              //           borderRadius: BorderRadius.circular(15),
+              //           border: Border.all(
+              //             color: Colors.white.withOpacity(0.3),
+              //             width: 1,
+              //           ),
+              //         ),
+              //         child: const Icon(
+              //           Icons.search,
+              //           color: Colors.white,
+              //           size: 20,
+              //         ),
+              //       ),
+              //     ),
+              //
+              //   ],
+              // ),
+              // const SizedBox(height: 25),
 
               // Page title
               const Text(

@@ -36,8 +36,8 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
         mainAxisSize: MainAxisSize.min,
         children: [
           // Quick action buttons
-          _buildQuickActionButtons(),
-          const SizedBox(height: 12),
+          // _buildQuickActionButtons(),
+          // const SizedBox(height: 12),
 
           // Input row
           Row(

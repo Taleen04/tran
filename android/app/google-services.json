@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "207005984967",
+    "project_id": "aitransport-14dcf",
+    "storage_bucket": "aitransport-14dcf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207005984967:android:6cd96938e9592e02bef6e2",
+        "android_client_info": {
+          "package_name": "com.example.IAParking"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALIfPX61aTIKsFyAXSBh9DtIAIEdyS0Ho"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207005984967:android:494a2a1ad6b783edbef6e2",
+        "android_client_info": {
+          "package_name": "com.example.ai_transport"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALIfPX61aTIKsFyAXSBh9DtIAIEdyS0Ho"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207005984967:android:e4e7d3450d5c8760bef6e2",
+        "android_client_info": {
+          "package_name": "com.metafortech.iaparkingtra"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALIfPX61aTIKsFyAXSBh9DtIAIEdyS0Ho"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

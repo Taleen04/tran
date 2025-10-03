@@ -40,20 +40,6 @@ class ChatConversationModel extends ChatConversationEntity {
       clientInfo: clientInfo,
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'data': {
-        'conversation_id': conversationId,
-        'unread_count': unreadCount,
-        'messages':
-            messages
-                .map((message) => (message as ChatMessageModel).toJson())
-                .toList(),
-        'client_info': (clientInfo as ClientInfoModel).toJson(),
-      },
-    };
-  }
 }
 
 class ClientInfoModel extends ClientInfoEntity {

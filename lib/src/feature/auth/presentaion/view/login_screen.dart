@@ -8,6 +8,7 @@ import 'package:ai_transport/src/feature/auth/presentaion/widgets/header_text.da
 import 'package:ai_transport/src/feature/auth/presentaion/widgets/login_button.dart';
 import 'package:ai_transport/src/feature/auth/presentaion/widgets/password_field.dart';
 import 'package:ai_transport/src/feature/auth/presentaion/widgets/phone_field.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,8 +59,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.background,
-        body:Form(
-        key:_formKey ,
+        body: Form(
+          key: _formKey,
           child: Container(
             width: double.infinity,
             height: double.infinity,
@@ -71,17 +72,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   const HeaderText(),
                   SizedBox(height: responsiveHeight(context, 90)),
-          
+
                   // هنا بمرر الكونترولر اللي جهزته
                   PhoneField(controller: controllers.phoneController),
                   SizedBox(height: responsiveHeight(context, 20)),
-          
+
                   PasswordField(
-                    controller:  controllers.passwordController,
+                    controller: controllers.passwordController,
                     text: AppLocalizations.of(context)!.enterYourPassword,
                   ),
                   SizedBox(height: responsiveHeight(context, 40)),
-          
+
                   const ForgetPasswordButton(),
                   LoginButton(onPressed: handleLogin),
                 ],
@@ -93,69 +94,69 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  void handleLogin() async {
+    HapticFeedback.mediumImpact();
 
-  void handleLogin() {
-  HapticFeedback.mediumImpact();
+    if (_formKey.currentState!.validate()) {
+      final rawPhone = controllers.phoneController.text.trim();
+      final userName = rawPhone.startsWith('0') ? rawPhone : '0$rawPhone';
+      final password = controllers.passwordController.text.trim();
+      final fcm = await FirebaseMessaging.instance.getToken() ?? "";
 
-  if (_formKey.currentState!.validate()) {
-    final rawPhone = controllers.phoneController.text.trim();
-    final userName = rawPhone.startsWith('0') ? rawPhone : '0$rawPhone';
-    final password = controllers.passwordController.text.trim();
-
-    context.read<LogInBloc>().add(
-      LogInButtonPressed(userName, password, "123",context),
-    );
-          SharedPrefHelper.getString(StorageKeys.current_status);
-    controllers.phoneController.clear();
-    controllers.passwordController.clear();
-  } else {
-    // الحقول غير صحيحة، Form سيعرض رسائل الأخطاء تلقائيًا
+      context.read<LogInBloc>().add(
+        LogInButtonPressed(userName, password, "123", fcm, context),
+      );
+      SharedPrefHelper.getString(StorageKeys.current_status);
+      controllers.phoneController.clear();
+      controllers.passwordController.clear();
+    } else {
+      // الحقول غير صحيحة، Form سيعرض رسائل الأخطاء تلقائيًا
+    }
   }
-}
 
-//   void handleLogin() {
-//     HapticFeedback.mediumImpact();
+  //   void handleLogin() {
+  //     HapticFeedback.mediumImpact();
 
-//     final rawPhone = controllers.phoneController.text.trim();
-//     final userName = rawPhone.startsWith('0') ? rawPhone : '0$rawPhone';
-//     final password = controllers.passwordController.text.trim();
+  //     final rawPhone = controllers.phoneController.text.trim();
+  //     final userName = rawPhone.startsWith('0') ? rawPhone : '0$rawPhone';
+  //     final password = controllers.passwordController.text.trim();
 
-//     if (userName.isEmpty) {
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         SnackBar(
-//           content: const Row(
-//             children: [
-//               Icon(Icons.warning_outlined, color: Colors.white),
-//               SizedBox(width: 10),
-//               Text('يرجى إدخال رقم الهاتف'),
-//             ],
-//           ),
-//           backgroundColor: Colors.orange,
-//         ),
-//       );
-//       return;
-//     }
+  //     if (userName.isEmpty) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           content: const Row(
+  //             children: [
+  //               Icon(Icons.warning_outlined, color: Colors.white),
+  //               SizedBox(width: 10),
+  //               Text('يرجى إدخال رقم الهاتف'),
+  //             ],
+  //           ),
+  //           backgroundColor: Colors.orange,
+  //         ),
+  //       );
+  //       return;
+  //     }
 
-//     if (password.length < 6) {
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         SnackBar(
-//           content: const Row(
-//             children: [
-//               Icon(Icons.warning_outlined, color: Colors.white),
-//               SizedBox(width: 10),
-//               Text('كلمة المرور يجب أن تكون 6 أحرف على الأقل'),
-//             ],
-//           ),
-//           backgroundColor: Colors.orange,
-//         ),
-//       );
-//       return;
-//     }
+  //     if (password.length < 6) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           content: const Row(
+  //             children: [
+  //               Icon(Icons.warning_outlined, color: Colors.white),
+  //               SizedBox(width: 10),
+  //               Text('كلمة المرور يجب أن تكون 6 أحرف على الأقل'),
+  //             ],
+  //           ),
+  //           backgroundColor: Colors.orange,
+  //         ),
+  //       );
+  //       return;
+  //     }
 
-//     context.read<LogInBloc>().add(
-//       LogInButtonPressed(userName, password, "123"),
-//     );
-//     controllers.phoneController.clear();
-//     controllers.passwordController.clear();
-//   }
+  //     context.read<LogInBloc>().add(
+  //       LogInButtonPressed(userName, password, "123"),
+  //     );
+  //     controllers.phoneController.clear();
+  //     controllers.passwordController.clear();
+  //   }
 }

@@ -14,10 +14,11 @@ class AuthRepository {
     String phone,
     String password,
     String deviceName,
+    String fcm,
     context
   ) async {
     // login
-    final model = await dataSource.login(phone, password, deviceName,context);
+    final model = await dataSource.login(phone, password, deviceName,fcm,context);
     if (model == null) {
       log("Login failed: empty response");
     }
@@ -27,6 +28,7 @@ class AuthRepository {
       staff: model.staff,
       token: model.token,
       tokenType: model.tokenType,
+
     );
   }
 

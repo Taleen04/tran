@@ -12,11 +12,13 @@ import '../widgets/chat_header.dart';
 
 class ChatScreen extends StatefulWidget {
   final int requestId;
+  final int conversationId;
   final String clientName;
 
   const ChatScreen({
     super.key,
     required this.requestId,
+    required this.conversationId,
     required this.clientName,
   });
 
@@ -33,7 +35,7 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     // Initialize Pusher and load chat conversation
     context.read<ChatBloc>().add(
-      InitializePusherEvent(conversationId: widget.requestId),
+      InitializePusherEvent(conversationId: widget.conversationId),
     );
     context.read<ChatBloc>().add(GetChatConversationEvent(widget.requestId));
   }
@@ -81,24 +83,25 @@ class _ChatScreenState extends State<ChatScreen> {
                 listener: (context, state) {
                   if (state is ChatConversationLoaded ||
                       state is ChatMessageSent ||
-                      state is ChatMessageAdded) {
+                      state is ChatMessageAdded || state is PusherSend || state is ChatImageSent) {
                     _scrollToBottom();
                   }
                 },
                 builder: (context, state) {
+                  var bloc = context.read<ChatBloc>();
                   if (state is ChatLoading) {
                     return const Center(
                       child: CircularProgressIndicator(
                         color: Color(0xFFFFA726),
                       ),
                     );
-                  } else if (state is ChatConversationLoaded) {
+                  } else if (state is ChatConversationLoaded || state is ChatImageSent || state is ChatMessageSent|| state is PusherSend || state is ChatImageSent) {
                     return ListView.builder(
                       controller: _scrollController,
                       padding: const EdgeInsets.all(16),
-                      itemCount: state.conversation.messages.length,
+                      itemCount: bloc.messages.length,
                       itemBuilder: (context, index) {
-                        final message = state.conversation.messages[index];
+                        final message = bloc.messages[index];
                         return ChatMessageBubble(message: message);
                       },
                     );
@@ -169,7 +172,7 @@ class _ChatScreenState extends State<ChatScreen> {
       context.read<ChatBloc>().add(
         SendChatMessageEvent(
           requestId: widget.requestId,
-          messageType: 'text',
+          messageType:  'text',
           message: message,
         ),
       );

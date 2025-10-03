@@ -8,7 +8,7 @@ class ChatMessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isFromMe = message.senderType == 'transport_staff';
+    final bool isFromMe = message.senderType == 'driver';
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
@@ -63,24 +63,24 @@ class ChatMessageBubble extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Message content
-                  if (message.messageType == 'text' && message.message != null)
+                  if (message.type == 'text' && message.content != null)
                     Text(
-                      message.message!,
+                      message.content!,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                         height: 1.4,
                       ),
                     )
-                  else if (message.messageType == 'image' &&
-                      message.attachmentUrl != null)
+                  else if (message.type == 'image' &&
+                      message.file != null)
                     _buildImageMessage()
-                  else if (message.messageType == 'voice' &&
-                      message.attachmentUrl != null)
+                  else if (message.type == 'voice' &&
+                      message.file != null)
                     _buildVoiceMessage()
-                  else if (message.messageType == 'quick_action' &&
-                      message.quickActionType != null)
-                    _buildQuickActionMessage()
+                  // else if (message.messageType == 'quick_action' &&
+                  //     message.quickActionType != null)
+                  //   _buildQuickActionMessage()
                   else
                     const Text(
                       'رسالة غير مدعومة',
@@ -98,7 +98,7 @@ class ChatMessageBubble extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        _formatTime(message.createdAt),
+                        _formatTime(DateTime.parse(message.formattedTime)),
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.7),
                           fontSize: 12,
@@ -146,7 +146,7 @@ class ChatMessageBubble extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: Image.network(
-          message.attachmentUrl!,
+          message.file!,
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) {
             return Container(
@@ -181,44 +181,44 @@ class ChatMessageBubble extends StatelessWidget {
     );
   }
 
-  Widget _buildQuickActionMessage() {
-    String actionText = '';
-    IconData actionIcon = Icons.help;
-
-    switch (message.quickActionType) {
-      case 'call':
-        actionText = 'اتصال';
-        actionIcon = Icons.phone;
-        break;
-      case 'whatsapp':
-        actionText = 'واتساب';
-        actionIcon = Icons.chat;
-        break;
-      case 'help':
-        actionText = 'مساعدة';
-        actionIcon = Icons.help;
-        break;
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(actionIcon, color: Colors.white, size: 20),
-          const SizedBox(width: 8),
-          Text(
-            actionText,
-            style: const TextStyle(color: Colors.white, fontSize: 14),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildQuickActionMessage() {
+  //   String actionText = '';
+  //   IconData actionIcon = Icons.help;
+  //
+  //   switch (message.quickActionType) {
+  //     case 'call':
+  //       actionText = 'اتصال';
+  //       actionIcon = Icons.phone;
+  //       break;
+  //     case 'whatsapp':
+  //       actionText = 'واتساب';
+  //       actionIcon = Icons.chat;
+  //       break;
+  //     case 'help':
+  //       actionText = 'مساعدة';
+  //       actionIcon = Icons.help;
+  //       break;
+  //   }
+  //
+  //   return Container(
+  //     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white.withOpacity(0.1),
+  //       borderRadius: BorderRadius.circular(20),
+  //     ),
+  //     child: Row(
+  //       mainAxisSize: MainAxisSize.min,
+  //       children: [
+  //         Icon(actionIcon, color: Colors.white, size: 20),
+  //         const SizedBox(width: 8),
+  //         Text(
+  //           actionText,
+  //           style: const TextStyle(color: Colors.white, fontSize: 14),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   String _formatTime(DateTime dateTime) {
     final now = DateTime.now();

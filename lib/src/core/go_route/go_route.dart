@@ -14,6 +14,7 @@ import 'package:ai_transport/src/feature/home/presentaion/view/widgets/home_view
 import 'package:ai_transport/src/feature/profile/data/data_source/edit_profile_data_source.dart';
 import 'package:ai_transport/src/feature/profile/domain/entity/profile_entity.dart';
 import 'package:ai_transport/src/feature/profile/presentation/view/edit_user_info_view.dart';
+import 'package:ai_transport/src/feature/profile/presentation/view/notfication_screen.dart';
 import 'package:ai_transport/src/feature/profile/presentation/view/profile.dart';
 import 'package:ai_transport/src/feature/profile/presentation/view/terms.dart';
 import 'package:ai_transport/src/feature/profile/repo/edit_profile_repo.dart';
@@ -54,6 +55,12 @@ class AppRouter {
             user: extra,
             repository: EditProfileRepository(EditProfileDataSource()),
           );
+        },
+      ),
+      GoRoute(
+        path: '/notifications',
+        builder: (context, state) {
+          return NotificationsScreen();
         },
       ),
 
@@ -98,9 +105,10 @@ class AppRouter {
           final requestId =
               int.tryParse(state.pathParameters['requestId'] ?? '0') ?? 0;
           final clientName = state.uri.queryParameters['clientName'] ?? 'عميل';
+          final int conversationId = int.tryParse(state.uri.queryParameters['conversationId'] ?? '0')?? 0;
 
           return ChatProvider.provideChatBloc(
-            child: ChatScreen(requestId: requestId, clientName: clientName),
+            child: ChatScreen(requestId: requestId, clientName: clientName,conversationId: conversationId,),
           );
         },
       ),

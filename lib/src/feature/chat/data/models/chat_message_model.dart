@@ -3,50 +3,42 @@ import 'package:ai_transport/src/feature/chat/domain/entities/chat_message_entit
 class ChatMessageModel extends ChatMessageEntity {
   ChatMessageModel({
     required super.id,
-    required super.conversationId,
     required super.senderType,
-    required super.senderId,
     required super.senderName,
-    required super.messageType,
-    super.message,
-    super.attachmentUrl,
-    super.quickActionType,
+    required super.isSystem,
     required super.isRead,
-    required super.createdAt,
+    required super.type,
+    required super.content,
+    required super.file,
+    required super.formattedTime,
   });
 
   factory ChatMessageModel.fromJson(Map<String, dynamic> json) {
     return ChatMessageModel(
       id: json['id'] as int? ?? 0,
-      conversationId: json['conversation_id'] as int? ?? 0,
-      senderType: json['sender_type'] as String? ?? 'user',
-      senderId: json['sender_id'] as int? ?? 0,
-      senderName: json['sender_name'] as String? ?? 'مستخدم',
-      messageType: json['message_type'] as String? ?? 'text',
-      message: json['message'] as String?,
-      attachmentUrl: json['attachment_url'] as String?,
-      quickActionType: json['quick_action_type'] as String?,
+      senderType: json["sender"]['role'] as String? ?? 'driver',
+      senderName: json["sender"]['name'] as String? ?? 'client',
+      isSystem: json["sender"]['is_system'] as bool? ?? false,
       isRead: json['is_read'] as bool? ?? false,
-      createdAt:
-          json['created_at'] != null
-              ? DateTime.parse(json['created_at'] as String)
-              : DateTime.now(),
+      type: json['type'] as String? ?? 'text',
+      content: json['content'] as String? ?? '',
+      file: json['file'] as String? ?? '',
+      formattedTime: json['formatted_time'] as String? ?? "",
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'conversation_id': conversationId,
-      'sender_type': senderType,
-      'sender_id': senderId,
-      'sender_name': senderName,
-      'message_type': messageType,
-      'message': message,
-      'attachment_url': attachmentUrl,
-      'quick_action_type': quickActionType,
-      'is_read': isRead,
-      'created_at': createdAt.toIso8601String(),
-    };
+  toEntity() {
+    return ChatMessageEntity(
+      id: id,
+      senderType: senderType,
+      senderName: senderName,
+      isSystem: isSystem,
+      isRead: isRead,
+      type: type,
+      content: content,
+      file: file,
+      formattedTime: formattedTime,
+    );
   }
+
 }

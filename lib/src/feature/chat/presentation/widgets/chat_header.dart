@@ -72,45 +72,45 @@ class ChatHeader extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
-                    const Text(
-                      'متصل الآن',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
+                    // const Text(
+                    //   'متصل الآن',
+                    //   style: TextStyle(
+                    //     color: Colors.white,
+                    //     fontSize: 13,
+                    //     fontWeight: FontWeight.w400,
+                    //   ),
+                    //   overflow: TextOverflow.ellipsis,
+                    //   maxLines: 1,
+                    // ),
                   ],
                 ),
               ),
 
               // Action buttons
-              Row(
-                children: [
-                  _buildActionButton(
-                    icon: Icons.phone,
-                    onTap: () {
-                      // Handle call action
-                    },
-                  ),
-                  const SizedBox(width: 8),
-                  _buildActionButton(
-                    icon: Icons.video_call,
-                    onTap: () {
-                      // Handle video call action
-                    },
-                  ),
-                  const SizedBox(width: 8),
-                  _buildActionButton(
-                    icon: Icons.more_vert,
-                    onTap: () {
-                      // Handle more options
-                    },
-                  ),
-                ],
-              ),
+              // Row(
+              //   children: [
+              //     _buildActionButton(
+              //       icon: Icons.phone,
+              //       onTap: () {
+              //         // Handle call action
+              //       },
+              //     ),
+              //     const SizedBox(width: 8),
+              //     _buildActionButton(
+              //       icon: Icons.video_call,
+              //       onTap: () {
+              //         // Handle video call action
+              //       },
+              //     ),
+              //     const SizedBox(width: 8),
+              //     _buildActionButton(
+              //       icon: Icons.more_vert,
+              //       onTap: () {
+              //         // Handle more options
+              //       },
+              //     ),
+              //   ],
+              // ),
             ],
           ),
         ),
@@ -118,21 +118,21 @@ class ChatHeader extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButton({
-    required IconData icon,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
-        ),
-        child: Icon(icon, color: Colors.white, size: 18),
-      ),
-    );
-  }
+  // Widget _buildActionButton({
+  //   required IconData icon,
+  //   required VoidCallback onTap,
+  // }) {
+  //   return GestureDetector(
+  //     onTap: onTap,
+  //     child: Container(
+  //       padding: const EdgeInsets.all(12),
+  //       decoration: BoxDecoration(
+  //         color: Colors.white.withOpacity(0.2),
+  //         borderRadius: BorderRadius.circular(15),
+  //         border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
+  //       ),
+  //       child: Icon(icon, color: Colors.white, size: 18),
+  //     ),
+  //   );
+  // }
 }

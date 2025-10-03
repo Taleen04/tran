@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ai_transport/src/feature/chat/domain/usecases/get_chat_conversation_usecase.dart';
 import 'package:ai_transport/src/feature/chat/domain/usecases/send_chat_message_usecase.dart';
@@ -8,36 +10,41 @@ import 'package:ai_transport/src/feature/chat/presentation/bloc/chat_event.dart'
 import 'package:ai_transport/src/feature/chat/presentation/bloc/chat_state.dart';
 import 'package:ai_transport/src/feature/chat/data/services/pusher_service.dart';
 import 'package:ai_transport/src/feature/chat/domain/entities/chat_message_entity.dart';
+import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
+
+import '../../data/models/chat_message_model.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final GetChatConversationUseCase _getChatConversationUseCase;
   final SendChatMessageUseCase _sendChatMessageUseCase;
   final SendChatImageUseCase _sendChatImageUseCase;
   final GetAllConversationsUseCase _getAllConversationsUseCase;
-  final PusherService _pusherService = PusherService.instance;
-  StreamSubscription<ChatMessageEntity>? _messageSubscription;
-  StreamSubscription<Map<String, dynamic>>? _eventSubscription;
+  final PusherService _pusherService;
 
   ChatBloc({
     required GetChatConversationUseCase getChatConversationUseCase,
     required SendChatMessageUseCase sendChatMessageUseCase,
     required SendChatImageUseCase sendChatImageUseCase,
     required GetAllConversationsUseCase getAllConversationsUseCase,
+    required PusherService pusherService,
   }) : _getChatConversationUseCase = getChatConversationUseCase,
        _sendChatMessageUseCase = sendChatMessageUseCase,
        _sendChatImageUseCase = sendChatImageUseCase,
        _getAllConversationsUseCase = getAllConversationsUseCase,
+       _pusherService = pusherService,
        super(ChatInitial()) {
     on<GetChatConversationEvent>(_onGetChatConversation);
     on<SendChatMessageEvent>(_onSendChatMessage);
     on<SendChatImageEvent>(_onSendChatImage);
     on<GetAllConversationsEvent>(_onGetAllConversations);
-    on<AddNewMessageEvent>(_onAddNewMessage);
-    on<MarkMessageAsReadEvent>(_onMarkMessageAsRead);
-    on<InitializePusherEvent>(_onInitializePusher);
-    on<DisposePusherEvent>(_onDisposePusher);
 
-    _initializePusherListeners();
+    on<MarkMessageAsReadEvent>(_onMarkMessageAsRead);
+    on<InitializePusherEvent>(initPusher);
+    on<PusherMessageReceived>((event, emit) {
+      messages.add(event.message);
+      emit(PusherSend()); // or a richer state if you want
+    });
+    on<DisposePusherEvent>(disposePusher);
   }
 
   Future<void> _onGetChatConversation(
@@ -47,11 +54,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     emit(ChatLoading());
     try {
       final conversation = await _getChatConversationUseCase(event.requestId);
+      messages.addAll(conversation.messages);
       emit(ChatConversationLoaded(conversation));
     } catch (e) {
       emit(ChatError('Failed to get chat conversation: $e'));
     }
   }
+
+  List<ChatMessageEntity> messages = [];
 
   Future<void> _onSendChatMessage(
     SendChatMessageEvent event,
@@ -67,6 +77,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           quickActionType: event.quickActionType,
         ),
       );
+      messages.add(message);
       emit(ChatMessageSent(message));
     } catch (e) {
       emit(ChatError('Failed to send message: $e'));
@@ -106,12 +117,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  void _onAddNewMessage(AddNewMessageEvent event, Emitter<ChatState> emit) {
-    // This will be used for real-time message updates via WebSocket
-    if (event.message is ChatMessageEntity) {
-      emit(ChatMessageAdded(event.message as ChatMessageEntity));
-    }
-  }
 
   void _onMarkMessageAsRead(
     MarkMessageAsReadEvent event,
@@ -121,65 +126,66 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     // Implementation depends on your specific requirements
   }
 
-  Future<void> _onInitializePusher(
-    InitializePusherEvent event,
-    Emitter<ChatState> emit,
-  ) async {
+  PusherChannelsFlutter pusher = PusherChannelsFlutter.getInstance();
+
+
+  void initPusher(  InitializePusherEvent event,
+      Emitter<ChatState> emit,)async{
     try {
-      await _pusherService.initialize();
-      if (event.conversationId != null) {
-        await _pusherService.subscribeToChannel(
-          'transport-chat.${event.conversationId}',
-        );
-      }
-      print('🔌 Pusher initialized for conversation: ${event.conversationId}');
+      var pusherKey = "61549ed0a2c8e226e9be";
+      var pusherCluster = "mt1";
+      await pusher.init(
+        apiKey: pusherKey,
+        cluster: pusherCluster,
+        onConnectionStateChange: (currentState, previousState) {
+          print(' ConnectionState: $currentState');
+        },
+        onSubscriptionError: (message, error) {
+          print('Subscription error: $message');
+        },
+        onSubscriptionSucceeded: (channelName, data) {
+          print('Subscription succeeded: $channelName');
+        },
+
+        onEvent: (event){
+          try{
+            if(event.eventName == "message.sent"){
+              var data = jsonDecode(event.data);
+              var message = data["message"];
+              print(message);
+              var messageEntity = ChatMessageEntity(id: message["id"], senderType: message["sender"]["role"], senderName: message["sender"]["name"], isRead: message["is_read"], isSystem: message["sender"]["is_system"], type: message["type"], content: message["content"], file: message["file"], formattedTime: message["formatted_time"]);
+              add(PusherMessageReceived(messageEntity)); // ✅ fire event, not emit
+
+            }
+          }catch(e){
+            print('❌ Error handling Pusher event: $e');
+          }
+        },
+      );
+      await pusher.subscribe(channelName: 'transport-chat.${event
+          .conversationId}');
+      await pusher.connect();
     } catch (e) {
-      print('❌ Failed to initialize Pusher: $e');
+      debugPrint("ERROR: $e");
     }
   }
 
-  Future<void> _onDisposePusher(
-    DisposePusherEvent event,
-    Emitter<ChatState> emit,
-  ) async {
-    try {
-      await _pusherService.disconnect();
-      _messageSubscription?.cancel();
-      _eventSubscription?.cancel();
-      print('🔌 Pusher disposed');
-    } catch (e) {
-      print('❌ Error disposing Pusher: $e');
+  void disposePusher(
+      DisposePusherEvent event,
+      Emitter<ChatState> emit,
+      )async{
+    if(pusher.connectionState == "CONNECTED") {
+      await pusher.disconnect();
     }
   }
 
-  void _initializePusherListeners() {
-    // Listen for real-time messages
-    _messageSubscription = _pusherService.messageStream.listen(
-      (message) {
-        add(AddNewMessageEvent(message));
-      },
-      onError: (error) {
-        print('❌ Message stream error: $error');
-      },
-    );
 
-    // Listen for transport events
-    _eventSubscription = _pusherService.eventStream.listen(
-      (event) {
-        print('📨 Transport event received: ${event['event']}');
-        // Handle transport events here if needed
-      },
-      onError: (error) {
-        print('❌ Event stream error: $error');
-      },
-    );
-  }
+
 
   @override
   Future<void> close() {
-    _messageSubscription?.cancel();
-    _eventSubscription?.cancel();
-    _pusherService.dispose();
+
+    _pusherService.disconnect();
     return super.close();
   }
 }

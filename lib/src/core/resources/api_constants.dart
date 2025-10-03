@@ -41,10 +41,12 @@ class ApiConstants {
   static String employees(int id) => 'employees/$id';
   static const String userProfile = 'profile';
   static const String editProfile = 'profile';
+
   static const String vehicleRegister = 'vehicle/register';
   static const String vehicles = 'vehicles';
   static String checkVehiclePlate(String plateNumber) =>
       'vehicle/check-plate/$plateNumber';
+
   static const String wallet = 'profile/wallet';
   //======================
   // 🟪 Calendar
@@ -56,8 +58,7 @@ class ApiConstants {
   //======================
   // 🟪 Need Van
   //======================
-  static String needVanRequest(int requestId) =>
-      'requests/$requestId/need-van';
+  static String needVanRequest(int requestId) => 'requests/$requestId/need-van';
   //======================
   // 🟪 Chat
   //======================
@@ -68,4 +69,10 @@ class ApiConstants {
   static String sendChatImage(int requestId) =>
       'requests/$requestId/chat/image';
   static const String getAllConversations = 'chat/conversations';
+
+  //notifications
+
+  static const String notifications = 'notifications';
+  static String readNotification(int notificationId) =>
+      'notifications/$notificationId/read';
 }

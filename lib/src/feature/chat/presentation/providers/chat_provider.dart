@@ -1,3 +1,4 @@
+import 'package:ai_transport/src/feature/chat/data/services/pusher_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/chat_bloc.dart';
@@ -25,6 +26,7 @@ class ChatProvider {
             getAllConversationsUseCase: GetAllConversationsUseCase(
               ChatRepositoryImpl(ChatDataSourceImpl()),
             ),
+            pusherService: PusherService()
           ),
       child: child,
     );

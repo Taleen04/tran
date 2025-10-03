@@ -257,7 +257,7 @@ class _ProfileState extends State<Profile> {
                                   _buildActionButton(
                                     icon: Icons.notifications,
                                     onPressed: () {
-                                      context.push("/notfication");
+                                      context.push("/notifications");
                                     },
                                   ),
                                 ],

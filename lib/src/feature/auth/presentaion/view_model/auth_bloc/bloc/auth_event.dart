@@ -8,9 +8,10 @@ class LogInButtonPressed extends LogInEvent {
   final String phone;
   final String password;
   final String device_name;
+  final String fcm;
   final context;
 
-   LogInButtonPressed(this.phone,  this.password, this.device_name,this.context);
+   LogInButtonPressed(this.phone,  this.password, this.device_name,this.fcm,this.context);
 }
 
 

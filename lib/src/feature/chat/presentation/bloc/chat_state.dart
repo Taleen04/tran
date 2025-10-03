@@ -26,6 +26,8 @@ class ChatMessageSent extends ChatState {
   ChatMessageSent(this.message);
 }
 
+class PusherSend extends ChatState {}
+
 class ChatImageSent extends ChatState {
   final Map<String, dynamic> result;
 

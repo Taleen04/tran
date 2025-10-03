@@ -20,17 +20,19 @@ class ChatIntegrationExample extends StatelessWidget {
 class ChatNavigationExample extends StatelessWidget {
   final int requestId;
   final String clientName;
+  final int conversationId;
 
   const ChatNavigationExample({
     super.key,
     required this.requestId,
+    required this.conversationId,
     required this.clientName,
   });
 
   @override
   Widget build(BuildContext context) {
     return ChatProvider.provideChatBloc(
-      child: ChatScreen(requestId: requestId, clientName: clientName),
+      child: ChatScreen(requestId: requestId, clientName: clientName,conversationId: conversationId,),
     );
   }
 }
@@ -39,11 +41,13 @@ class ChatNavigationExample extends StatelessWidget {
 class ChatButton extends StatelessWidget {
   final int requestId;
   final String clientName;
+  final int conversationId;
 
   const ChatButton({
     super.key,
     required this.requestId,
     required this.clientName,
+    required this.conversationId,
   });
 
   @override
@@ -55,6 +59,7 @@ class ChatButton extends StatelessWidget {
             builder:
                 (context) => ChatNavigationExample(
                   requestId: requestId,
+                  conversationId: conversationId,
                   clientName: clientName,
                 ),
           ),

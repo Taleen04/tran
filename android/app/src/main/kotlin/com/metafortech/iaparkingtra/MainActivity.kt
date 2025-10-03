@@ -1,4 +1,4 @@
-package com.example.ai_transport
+package com.metafortech.iaparkingtra
 
 import io.flutter.embedding.android.FlutterActivity
 

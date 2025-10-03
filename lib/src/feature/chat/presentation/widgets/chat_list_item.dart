@@ -32,14 +32,16 @@ class ChatListItem extends StatelessWidget {
             CircleAvatar(
               radius: 24,
               backgroundColor: const Color(0xFFFFA726),
-              child: Text(
-                conversation.clientName.isNotEmpty
-                    ? conversation.clientName[0]
-                    : '?',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+              child: Center(
+                child: Text(
+                  conversation.participants.client.name.isNotEmpty
+                      ? conversation.participants.client.name.substring(0, 1)
+                      : '?',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
@@ -56,7 +58,7 @@ class ChatListItem extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          conversation.clientName,
+                          conversation.participants.client.name,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 16,
@@ -66,7 +68,7 @@ class ChatListItem extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        _formatTime(conversation.lastMessageAt),
+                        _formatTime(conversation.activity.lastActivity),
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.6),
                           fontSize: 12,
@@ -81,7 +83,7 @@ class ChatListItem extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          conversation.lastMessage,
+                          conversation.activity.lastMessage ?? "",
                           style: TextStyle(
                             color: Colors.white.withOpacity(0.7),
                             fontSize: 14,
@@ -115,29 +117,6 @@ class ChatListItem extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
 
-                  // Status
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 2,
-                        ),
-                        decoration: BoxDecoration(
-                          color: _getStatusColor(conversation.requestStatus),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          _getStatusText(conversation.requestStatus),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
@@ -162,33 +141,4 @@ class ChatListItem extends StatelessWidget {
     }
   }
 
-  Color _getStatusColor(String status) {
-    switch (status.toLowerCase()) {
-      case 'in_progress':
-        return Colors.blue;
-      case 'completed':
-        return Colors.green;
-      case 'cancelled':
-        return Colors.red;
-      case 'pending':
-        return Colors.orange;
-      default:
-        return Colors.grey;
-    }
-  }
-
-  String _getStatusText(String status) {
-    switch (status.toLowerCase()) {
-      case 'in_progress':
-        return 'جاري';
-      case 'completed':
-        return 'مكتمل';
-      case 'cancelled':
-        return 'ملغي';
-      case 'pending':
-        return 'معلق';
-      default:
-        return status;
-    }
-  }
 }

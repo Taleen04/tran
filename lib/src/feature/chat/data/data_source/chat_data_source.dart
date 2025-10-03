@@ -80,10 +80,8 @@ class ChatDataSourceImpl implements ChatDataSource {
       );
 
       if (response.statusCode == 200) {
-        final messageModel = ChatMessageModel.fromJson(response.data['data']);
+        final messageModel = ChatMessageModel.fromJson(response.data['data']["message"]);
 
-        // Send local event to Pusher since API doesn't trigger it
-        _sendLocalMessageEvent(requestId, messageModel);
 
         return messageModel;
       } else {
@@ -149,34 +147,4 @@ class ChatDataSourceImpl implements ChatDataSource {
     }
   }
 
-  /// Send local message event to Pusher since API doesn't trigger it
-  void _sendLocalMessageEvent(int requestId, ChatMessageModel message) {
-    try {
-      // Get Pusher service instance
-      final pusherService = PusherService.instance;
-
-      // Create event data similar to what server would send
-      final eventData = {
-        'id': message.id,
-        'conversation_id': requestId,
-        'sender_type': message.senderType,
-        'sender_id': message.senderId,
-        'sender_name': message.senderName,
-        'message_type': message.messageType,
-        'message': message.message,
-        'is_read': message.isRead,
-        'created_at': message.createdAt.toIso8601String(),
-        'sent_at': message.createdAt.toIso8601String(), // Add sent_at field
-      };
-
-      // Simulate receiving the event locally
-      print('📤 Sending local message event');
-      print('📤 Event data: $eventData');
-
-      // Use PusherService to simulate the event
-      pusherService.simulateMessageEvent(eventData);
-    } catch (e) {
-      print('❌ Error sending local message event: $e');
-    }
-  }
 }

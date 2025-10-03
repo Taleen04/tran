@@ -52,7 +52,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyALIfPX61aTIKsFyAXSBh9DtIAIEdyS0Ho',
-    appId: '1:207005984967:android:494a2a1ad6b783edbef6e2',
+    appId: '1:207005984967:android:e4e7d3450d5c8760bef6e2',
     messagingSenderId: '207005984967',
     projectId: 'aitransport-14dcf',
     storageBucket: 'aitransport-14dcf.firebasestorage.app',
@@ -60,20 +60,20 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAcQXcRRA7zBk9V4d_-YqVjflCWJW0mTfI',
-    appId: '1:207005984967:ios:cf71d98a42f134ffbef6e2',
+    appId: '1:207005984967:ios:5b805068a252bdebbef6e2',
     messagingSenderId: '207005984967',
     projectId: 'aitransport-14dcf',
     storageBucket: 'aitransport-14dcf.firebasestorage.app',
-    iosBundleId: 'com.example.aiTransport',
+    iosBundleId: 'com.metafortech.iaparkingtra',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyAcQXcRRA7zBk9V4d_-YqVjflCWJW0mTfI',
-    appId: '1:207005984967:ios:cf71d98a42f134ffbef6e2',
+    appId: '1:207005984967:ios:5b805068a252bdebbef6e2',
     messagingSenderId: '207005984967',
     projectId: 'aitransport-14dcf',
     storageBucket: 'aitransport-14dcf.firebasestorage.app',
-    iosBundleId: 'com.example.aiTransport',
+    iosBundleId: 'com.metafortech.iaparkingtra',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(

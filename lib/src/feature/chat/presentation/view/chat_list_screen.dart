@@ -60,7 +60,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                           conversation: conversation,
                           onTap: () {
                             context.go(
-                              '/chat/${conversation.requestId}?clientName=${conversation.clientName}',
+                              '/chat/${conversation.requestId}?clientName=${conversation.participants.client.name}&conversationId=${conversation.id}&requestId=${conversation.requestId}',
                             );
                           },
                         );

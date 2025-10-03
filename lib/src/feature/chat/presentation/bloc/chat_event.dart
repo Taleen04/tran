@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import '../../domain/entities/chat_message_entity.dart';
+
 abstract class ChatEvent {}
 
 class GetChatConversationEvent extends ChatEvent {
@@ -62,4 +64,9 @@ class InitializePusherEvent extends ChatEvent {
 
 class DisposePusherEvent extends ChatEvent {
   DisposePusherEvent();
+}
+
+class PusherMessageReceived extends ChatEvent {
+  final ChatMessageEntity message;
+  PusherMessageReceived(this.message);
 }
