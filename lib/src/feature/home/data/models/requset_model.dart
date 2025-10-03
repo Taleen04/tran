@@ -43,10 +43,12 @@ class MyRequestModel {
   final ClientModel client;
   final String origin;
   final String destination;
+  final Map<String, String> currentStatusTypes;
   final String vehicleType;
   final int passengers;
   final int bags;
   final String? notes;
+  final String currentStatus;
   final int minutesRemaining;
   final List<int>? timeRemaining;
   final int priorityLevel;
@@ -71,8 +73,10 @@ class MyRequestModel {
     required this.destination,
     required this.vehicleType,
     required this.passengers,
+    required this.currentStatus,
     required this.bags,
     this.notes,
+    required this.currentStatusTypes,
     required this.minutesRemaining,
     this.timeRemaining,
     required this.priorityLevel,
@@ -109,6 +113,8 @@ class MyRequestModel {
 
     return MyRequestModel(
       id: json['id'] as int,
+      currentStatus: json['current_status'] ?? "",
+      currentStatusTypes: Map<String, String>.from(json['current_status_types']),
       status: json['status'] as String,
       client: ClientModel.fromJson(json['client'] as Map<String, dynamic>),
       origin: json['origin'] as String,
@@ -151,6 +157,8 @@ class MyRequestModel {
   RequestEntity toEntity() {
     return RequestEntity(
       id: id,
+      currentStatus: currentStatus,
+      currentStatusTypes: currentStatusTypes,
       status: status,
       client: client.toEntity(),
       origin: origin,
