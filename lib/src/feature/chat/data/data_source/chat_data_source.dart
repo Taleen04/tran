@@ -16,7 +16,7 @@ abstract class ChatDataSource {
     File? attachment,
     String? quickActionType,
   });
-  Future<Map<String, dynamic>> sendChatImage({
+  Future<ChatMessageModel> sendChatImage({
     required int requestId,
     required File image,
     String? caption,
@@ -93,7 +93,7 @@ class ChatDataSourceImpl implements ChatDataSource {
   }
 
   @override
-  Future<Map<String, dynamic>> sendChatImage({
+  Future<ChatMessageModel> sendChatImage({
     required int requestId,
     required File image,
     String? caption,
@@ -116,7 +116,7 @@ class ChatDataSourceImpl implements ChatDataSource {
       );
 
       if (response.statusCode == 200) {
-        return response.data['data'];
+        return ChatMessageModel.fromJson(response.data['data']["message"]);
       } else {
         throw Exception('Failed to send chat image: ${response.statusCode}');
       }

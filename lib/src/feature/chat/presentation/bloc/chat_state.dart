@@ -2,6 +2,8 @@ import 'package:ai_transport/src/feature/chat/domain/entities/chat_conversation_
 import 'package:ai_transport/src/feature/chat/domain/entities/chat_conversation_list_entity.dart';
 import 'package:ai_transport/src/feature/chat/domain/entities/chat_message_entity.dart';
 
+import '../../data/models/chat_message_model.dart';
+
 abstract class ChatState {}
 
 class ChatInitial extends ChatState {}
@@ -29,7 +31,7 @@ class ChatMessageSent extends ChatState {
 class PusherSend extends ChatState {}
 
 class ChatImageSent extends ChatState {
-  final Map<String, dynamic> result;
+  final ChatMessageModel result;
 
   ChatImageSent(this.result);
 }

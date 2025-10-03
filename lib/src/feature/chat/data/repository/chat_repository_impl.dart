@@ -5,6 +5,8 @@ import 'package:ai_transport/src/feature/chat/domain/entities/chat_message_entit
 import 'package:ai_transport/src/feature/chat/domain/repository/chat_repository.dart';
 import 'dart:io';
 
+import '../models/chat_message_model.dart';
+
 class ChatRepositoryImpl implements ChatRepository {
   final ChatDataSource _dataSource;
 
@@ -43,7 +45,7 @@ class ChatRepositoryImpl implements ChatRepository {
   }
 
   @override
-  Future<Map<String, dynamic>> sendChatImage({
+  Future<ChatMessageModel> sendChatImage({
     required int requestId,
     required File image,
     String? caption,

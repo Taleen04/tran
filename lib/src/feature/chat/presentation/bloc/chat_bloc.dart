@@ -96,6 +96,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           caption: event.caption,
         ),
       );
+      messages.add(result);
       emit(ChatImageSent(result));
     } catch (e) {
       emit(ChatError('Failed to send image: $e'));
