@@ -30,11 +30,7 @@ class ChatMessageSent extends ChatState {
 
 class PusherSend extends ChatState {}
 
-class ChatImageSent extends ChatState {
-  final ChatMessageModel result;
 
-  ChatImageSent(this.result);
-}
 
 class ChatError extends ChatState {
   final String message;
@@ -42,8 +38,4 @@ class ChatError extends ChatState {
   ChatError(this.message);
 }
 
-class ChatMessageAdded extends ChatState {
-  final ChatMessageEntity message;
 
-  ChatMessageAdded(this.message);
-}

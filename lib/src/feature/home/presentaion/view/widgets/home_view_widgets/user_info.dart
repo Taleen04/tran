@@ -39,39 +39,40 @@ class _UserInfoState extends State<UserInfo> {
                 children: [
                   Text(
                     state.userProfile.name,
-                    style: AppTextStyling.font26W500TextInter.copyWith(fontSize: 
-                    20),
+                    style: AppTextStyling.font26W500TextInter.copyWith(
+                      fontSize: 20,
+                    ),
                   ),
                   SizedBox(height: responsiveWidth(context, 10)),
-                  Text(state.userProfile.serviceType ?? '',
-                    
+                  Text(
+                    state.userProfile.serviceType ?? '',
+
                     style: AppTextStyling.font14W500TextInter,
                   ),
                   SizedBox(height: responsiveHeight(context, 10)),
-                 
                 ],
               ),
-               Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.star,
-                          color: AppColors.orange,
-                          size: 20,
-                          weight: 16,
-                        ),
-                        const SizedBox(width: AppSpacing.sm),
-                        Text(
-                          state.userProfile.rating,
-                          style: AppTextStyling.font14W500TextInter.copyWith(
-                            color: AppColors.textWhite,
-                            fontWeight: FontWeightHelper.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ],
-                    )
-            
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.star,
+                    color: AppColors.orange,
+                    size: 20,
+                    weight: 16,
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  Text(
+                    state.userProfile.rating,
+                    style: AppTextStyling.font14W500TextInter.copyWith(
+                      color: AppColors.textWhite,
+                      fontWeight: FontWeightHelper.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
+              ),
+
               // ),
             ],
           );

@@ -83,7 +83,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 listener: (context, state) {
                   if (state is ChatConversationLoaded ||
                       state is ChatMessageSent ||
-                      state is ChatMessageAdded || state is PusherSend || state is ChatImageSent) {
+                      state is PusherSend) {
                     _scrollToBottom();
                   }
                 },
@@ -95,7 +95,9 @@ class _ChatScreenState extends State<ChatScreen> {
                         color: Color(0xFFFFA726),
                       ),
                     );
-                  } else if (state is ChatConversationLoaded || state is ChatImageSent || state is ChatMessageSent|| state is PusherSend || state is ChatImageSent) {
+                  } else if (state is ChatConversationLoaded ||
+                      state is ChatMessageSent ||
+                      state is PusherSend) {
                     return ListView.builder(
                       controller: _scrollController,
                       padding: const EdgeInsets.all(16),
@@ -172,7 +174,7 @@ class _ChatScreenState extends State<ChatScreen> {
       context.read<ChatBloc>().add(
         SendChatMessageEvent(
           requestId: widget.requestId,
-          messageType:  'text',
+          messageType: 'text',
           message: message,
         ),
       );
@@ -186,9 +188,11 @@ class _ChatScreenState extends State<ChatScreen> {
 
     if (image != null) {
       context.read<ChatBloc>().add(
-        SendChatImageEvent(
+        SendChatMessageEvent(
           requestId: widget.requestId,
-          image: File(image.path),
+          attachments: [File(image.path)],
+          messageType: "image",
+          message: "image"
         ),
       );
     }

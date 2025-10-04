@@ -35,7 +35,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
        super(ChatInitial()) {
     on<GetChatConversationEvent>(_onGetChatConversation);
     on<SendChatMessageEvent>(_onSendChatMessage);
-    on<SendChatImageEvent>(_onSendChatImage);
     on<GetAllConversationsEvent>(_onGetAllConversations);
 
     on<MarkMessageAsReadEvent>(_onMarkMessageAsRead);
@@ -73,7 +72,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           requestId: event.requestId,
           messageType: event.messageType,
           message: event.message,
-          attachment: event.attachment,
+          attachments: event.attachments,
           quickActionType: event.quickActionType,
         ),
       );
@@ -84,24 +83,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  Future<void> _onSendChatImage(
-    SendChatImageEvent event,
-    Emitter<ChatState> emit,
-  ) async {
-    try {
-      final result = await _sendChatImageUseCase(
-        SendChatImageParams(
-          requestId: event.requestId,
-          image: event.image,
-          caption: event.caption,
-        ),
-      );
-      messages.add(result);
-      emit(ChatImageSent(result));
-    } catch (e) {
-      emit(ChatError('Failed to send image: $e'));
-    }
-  }
+
 
   Future<void> _onGetAllConversations(
     GetAllConversationsEvent event,

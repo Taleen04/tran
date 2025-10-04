@@ -13,7 +13,7 @@ abstract class ChatDataSource {
     required int requestId,
     required String messageType,
     String? message,
-    File? attachment,
+    List<File>? attachments,
     String? quickActionType,
   });
   Future<ChatMessageModel> sendChatImage({
@@ -51,7 +51,7 @@ class ChatDataSourceImpl implements ChatDataSource {
     required int requestId,
     required String messageType,
     String? message,
-    File? attachment,
+    List<File>? attachments,
     String? quickActionType,
   }) async {
     try {
@@ -63,9 +63,9 @@ class ChatDataSourceImpl implements ChatDataSource {
         formData.fields.add(MapEntry('message', message));
       }
 
-      if (attachment != null) {
+      if (attachments != null) {
         formData.files.add(
-          MapEntry('attachment', await MultipartFile.fromFile(attachment.path)),
+          MapEntry('attachments', await MultipartFile.fromFile(attachments.first.path)),
         );
       }
 
