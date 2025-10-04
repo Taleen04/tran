@@ -22,7 +22,7 @@ class ChatMessageModel extends ChatMessageEntity {
       isRead: json['is_read'] as bool? ?? false,
       type: json['type'] as String? ?? 'text',
       content: json['content'] as String? ?? '',
-      file: json['file'] as String? ?? '',
+      file: json['file'] != null ? json['file']['url'] as String? ?? '' : null,
       formattedTime: json['formatted_time'] as String? ?? "",
     );
   }

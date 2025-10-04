@@ -14,19 +14,29 @@ class SendChatMessageEvent extends ChatEvent {
   final int requestId;
   final String messageType;
   final String? message;
-  final List<File>? attachments;
+  final File? attachment;
   final String? quickActionType;
 
   SendChatMessageEvent({
     required this.requestId,
     required this.messageType,
     this.message,
-    this.attachments,
+    this.attachment,
     this.quickActionType,
   });
 }
 
+class SendChatImageEvent extends ChatEvent {
+  final int requestId;
+  final File image;
+  final String? caption;
 
+  SendChatImageEvent({
+    required this.requestId,
+    required this.image,
+    this.caption,
+  });
+}
 
 class GetAllConversationsEvent extends ChatEvent {
   final String? status;

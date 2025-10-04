@@ -30,12 +30,15 @@ class ChatMessageSent extends ChatState {
 
 class PusherSend extends ChatState {}
 
+class ChatImageSent extends ChatState {
+  final ChatMessageModel result;
 
+  ChatImageSent(this.result);
+}
 
 class ChatError extends ChatState {
   final String message;
 
   ChatError(this.message);
 }
-
 

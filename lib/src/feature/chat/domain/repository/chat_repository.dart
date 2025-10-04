@@ -11,7 +11,7 @@ abstract class ChatRepository {
     required int requestId,
     required String messageType,
     String? message,
-    List<File>? attachments,
+    File? attachment,
     String? quickActionType,
   });
   Future<ChatMessageModel> sendChatImage({
