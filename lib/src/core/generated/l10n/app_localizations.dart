@@ -74,6 +74,10 @@ abstract class AppLocalizations {
   String get AreYouSureYouWantToLogOut;
   String get Documents;
   String get VehicleLicense;
+  String get changePassword;
+  String get thePasswordMustContainACombinationOfNumbersLettersandSpecialSymbols;
+  String get currentPassword;
+  String get newPassword;
   String get Id;
   String get CertificateOfNoCriminalRecord;
   String get HisOwnWallet;
@@ -127,6 +131,10 @@ abstract class AppLocalizations {
   String get namePlaceholder;
   String get userNamePlaceholder;
   String get saveButtonText;
+  String get updateProfile;
+  String get name;
+  String get save;
+
 }
 
 class _AppLocalizationsDelegate

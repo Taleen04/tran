@@ -9,6 +9,7 @@ class RequestTakeoverDataSource {
   Future<RequestTakeoverModel> takeoverRequest({
     required int requestId,
     required String reason,
+    context
   }) async {
     final body = {'reason': reason};
 
@@ -32,8 +33,9 @@ class RequestTakeoverDataSource {
       // التعامل مع الأخطاء الخاصة بـ Dio
       if (e.response?.statusCode == 400) {
         final message = e.response?.data['message'] ?? 'Unknown error';
-      
+        SnackbarUtils.showError(context, message);
         throw Exception('Cannot takeover request: $message');
+        
         
       } else {
         throw Exception('Error taking over request: ${e.message}');

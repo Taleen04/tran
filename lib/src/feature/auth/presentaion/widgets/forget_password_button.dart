@@ -18,7 +18,7 @@ class ForgetPasswordButton extends StatelessWidget {
         child: TextButton(
           onPressed: () {
             HapticFeedback.lightImpact();
-            context.push("/forget_password");
+           // context.push("/forget_password");
           },
           child: Text(
             //'نسيت كلمة السر؟',
