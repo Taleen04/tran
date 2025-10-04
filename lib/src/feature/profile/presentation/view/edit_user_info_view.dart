@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
-import 'package:ai_transport/l10n/app_localizations.dart';
+import 'package:ai_transport/l10n/app_localizations.dart' hide AppLocalizations;
 import 'package:ai_transport/src/core/constants/app_colors.dart';
 import 'package:ai_transport/src/core/constants/app_text_styling.dart';
 import 'package:ai_transport/src/core/constants/font_weight_helper.dart';

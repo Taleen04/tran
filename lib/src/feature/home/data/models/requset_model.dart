@@ -116,7 +116,7 @@ class MyRequestModel {
 
     return MyRequestModel(
       id: json['id'] as int,
-      previousDriverName: json['driver']['name']?? "",
+      previousDriverName: json['driver'] != null ? json['driver']['name'] ?? "" : "",
       currentStatus: json['current_status'] ?? "",
       currentStatusTypes: Map<String, String>.from(json['current_status_types']),
       status: json['status'] as String,

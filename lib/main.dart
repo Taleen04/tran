@@ -173,7 +173,7 @@ class MyApp extends StatelessWidget {
               GlobalCupertinoLocalizations.delegate,
             ],
             debugShowCheckedModeBanner: false,
-            title: 'Transport IA',
+            title: 'IA Parking Driver',
             routerConfig: AppRouter.router,
           );
         },

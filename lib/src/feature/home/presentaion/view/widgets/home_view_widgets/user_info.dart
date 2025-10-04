@@ -1,8 +1,5 @@
-import 'dart:developer';
 
-import 'dart:developer';
 
-import 'package:ai_transport/l10n/app_localizations.dart';
 import 'package:ai_transport/src/core/constants/app_colors.dart';
 import 'package:ai_transport/src/core/constants/app_spacing.dart';
 import 'package:ai_transport/src/core/constants/app_text_styling.dart';
@@ -10,7 +7,6 @@ import 'package:ai_transport/src/core/constants/font_weight_helper.dart';
 import 'package:ai_transport/src/core/generated/l10n/app_localizations.dart';
 import 'package:ai_transport/src/core/utils/responsive_size_helper.dart';
 import 'package:ai_transport/src/feature/profile/data/data_source/online_status_data_sourse.dart';
-import 'package:ai_transport/src/feature/profile/presentation/view/widgets/custom_list_tile.dart';
 import 'package:ai_transport/src/feature/profile/presentation/view_models/bloc/information_data_profile_bloc/get_user_profile_bloc.dart';
 import 'package:ai_transport/src/feature/profile/presentation/view_models/bloc/information_data_profile_bloc/get_user_profile_state.dart';
 import 'package:ai_transport/src/feature/profile/presentation/view_models/bloc/update_user_status/update_user_status_bloc.dart';
@@ -27,7 +23,6 @@ class UserInfo extends StatefulWidget {
 }
 
 class _UserInfoState extends State<UserInfo> {
-  bool isSwitched = false;
   bool isOnline = false;
 bool onlineStatus = false;
 
@@ -124,7 +119,7 @@ final repo = OnlineStatusRepo(dataSource: OnlineStatusDataSource());
                   Row(
                     children: [
                       Text(
-                        isSwitched
+                        isOnline
                             ? AppLocalizations.of(context)!.on
                             : AppLocalizations.of(context)!.off,
                         style: AppTextStyling.font14W500TextInter.copyWith(
@@ -133,7 +128,7 @@ final repo = OnlineStatusRepo(dataSource: OnlineStatusDataSource());
                       ),
                       SizedBox(width: 8),
                       Switch(
-                        value: isSwitched,
+                        value: isOnline,
                         onChanged: (value) {
                           toggleOnlineStatus(value);
                         },
