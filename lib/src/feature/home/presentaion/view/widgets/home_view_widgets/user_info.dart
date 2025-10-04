@@ -1,10 +1,18 @@
+import 'dart:developer';
+
+import 'package:ai_transport/l10n/app_localizations.dart';
 import 'package:ai_transport/src/core/constants/app_colors.dart';
 import 'package:ai_transport/src/core/constants/app_spacing.dart';
 import 'package:ai_transport/src/core/constants/app_text_styling.dart';
 import 'package:ai_transport/src/core/constants/font_weight_helper.dart';
 import 'package:ai_transport/src/core/utils/responsive_size_helper.dart';
+import 'package:ai_transport/src/feature/profile/data/data_source/online_status_data_sourse.dart';
+import 'package:ai_transport/src/feature/profile/presentation/view/widgets/custom_list_tile.dart';
 import 'package:ai_transport/src/feature/profile/presentation/view_models/bloc/information_data_profile_bloc/get_user_profile_bloc.dart';
 import 'package:ai_transport/src/feature/profile/presentation/view_models/bloc/information_data_profile_bloc/get_user_profile_state.dart';
+import 'package:ai_transport/src/feature/profile/presentation/view_models/bloc/update_user_status/update_user_status_bloc.dart';
+import 'package:ai_transport/src/feature/profile/presentation/view_models/bloc/update_user_status/update_user_status_event.dart';
+import 'package:ai_transport/src/feature/profile/repo/online_status_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,6 +25,72 @@ class UserInfo extends StatefulWidget {
 
 class _UserInfoState extends State<UserInfo> {
   bool isSwitched = false;
+  bool isOnline = false;
+bool onlineStatus = false;
+
+final repo = OnlineStatusRepo(dataSource: OnlineStatusDataSource());
+  void toggleOnlineStatus(bool value) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      // إرسال القيمتين للـ API
+      final entity = await repo.updateOnlineStatus(
+        value, // online_status
+        value, // is_online
+      );
+
+      Navigator.of(context).pop();
+
+      setState(() {
+        isOnline = entity.isOnline;
+        onlineStatus = entity.isOnline;
+      });
+
+      // ✅ إرسالها للـ Bloc
+      context.read<UpdateUserStatusBloc>().add(
+        UpdateUserStatusRequested(
+          onlineStatus: entity.isOnline,
+          isOnline: entity.isOnline,
+        ),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            entity.isOnline ? 'تم تفعيل حالتك بنجاح' : 'تم إلغاء تفعيل حالتك',
+            style: const TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    } catch (e) {
+      Navigator.of(context).pop();
+      log('Failed to update status: $e');
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+            'فشل في تحديث حالتك',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 3),
+          action: SnackBarAction(
+            label: 'إعادة المحاولة',
+            textColor: Colors.white,
+            onPressed: () {
+              toggleOnlineStatus(value);
+            },
+          ),
+        ),
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<GetUserProfileBloc, GetUserProfileState>(
@@ -37,6 +111,7 @@ class _UserInfoState extends State<UserInfo> {
             children: [
               Column(
                 children: [
+                 
                   Text(
                     state.userProfile.name,
                     style: AppTextStyling.font26W500TextInter.copyWith(
@@ -50,6 +125,7 @@ class _UserInfoState extends State<UserInfo> {
                     style: AppTextStyling.font14W500TextInter,
                   ),
                   SizedBox(height: responsiveHeight(context, 10)),
+                   
                 ],
               ),
               Row(

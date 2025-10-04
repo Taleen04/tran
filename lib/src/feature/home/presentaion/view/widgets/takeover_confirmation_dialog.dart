@@ -1,6 +1,7 @@
 import 'package:ai_transport/src/core/constants/app_colors.dart';
 import 'package:ai_transport/src/core/constants/app_text_styling.dart';
 import 'package:ai_transport/src/core/constants/font_weight_helper.dart';
+import 'package:ai_transport/src/core/utils/snack_bar_helper.dart';
 import 'package:flutter/material.dart';
 
 class TakeoverConfirmationDialog extends StatefulWidget {
@@ -32,6 +33,7 @@ class _TakeoverConfirmationDialogState extends State<TakeoverConfirmationDialog>
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: AppColors.cardBackground,
       title: Text(
         'تأكيد سحب الطلب',
         style: AppTextStyling.font14W500TextInter.copyWith(
@@ -116,10 +118,11 @@ class _TakeoverConfirmationDialogState extends State<TakeoverConfirmationDialog>
             if (_formKey.currentState!.validate()) {
               widget.onConfirm(_reasonController.text.trim());
               Navigator.of(context).pop();
+              SnackbarUtils.showSuccess(context, "تم سحب الطلب بنجاح");
             }
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
+            backgroundColor: AppColors.orange,
             foregroundColor: AppColors.textWhite,
             padding: const EdgeInsets.symmetric(
               horizontal: 16,

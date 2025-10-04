@@ -1,10 +1,11 @@
 import 'package:ai_transport/src/core/database/api/apiclient.dart';
 import 'package:ai_transport/src/core/resources/api_constants.dart';
+import 'package:ai_transport/src/core/utils/snack_bar_helper.dart';
 import 'package:ai_transport/src/feature/home/data/models/get_my_request_model.dart';
 import 'package:ai_transport/src/feature/home/data/models/requset_model.dart';
 
 class OrderDataSource {
-  Future<List<MyRequestModel>> fetchOrders(String vehicleType, bool urgentOnly) async {
+  Future<List<MyRequestModel>> fetchOrders(String vehicleType, bool urgentOnly,) async {
     final queryParameters = {
       'vehicle_type': vehicleType,
       'urgent_only': urgentOnly,
@@ -50,10 +51,11 @@ class OrderDataSource {
     }
   }
 
-  Future<Map<String, dynamic>> acceptRequest(int id) async {
+  Future<Map<String, dynamic>> acceptRequest(int id,) async {
     final response = await ApiClient.dio.post(ApiConstants.acceptRequest(id));
     if (response.statusCode == 200) {
       final data = response.data as Map<String, dynamic>;
+     
       return data;
     } else {
       throw Exception('Failed to accept request $id: ${response.statusCode}');

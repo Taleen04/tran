@@ -276,6 +276,34 @@ class AppLocalizationsAr extends AppLocalizations {
   
   @override
   String get editOrder => "تعديل الطلب";
+  
+  @override
+  // TODO: implement name
+  String get name => "الإسم";
+  
+  @override
+  // TODO: implement save
+  String get save => "حفظ التغييرات";
+  
+  @override
+  // TODO: implement updateProfile
+  String get updateProfile => "تعديل البروفايل";
+  
+  @override
+  // TODO: implement changePassword
+  String get changePassword => "إعادة تعيين كلمة المرور";
+  
+  @override
+  // TODO: implement currentPassword
+  String get currentPassword => "كلمة المرور الحالية";
+  
+  @override
+  // TODO: implement newPassword
+  String get newPassword => "كلمة المرور الجديدة";
+  
+  @override
+  // TODO: implement thePasswordMustContainACombinationOfNumbersLettersandSpecialSymbols
+  String get thePasswordMustContainACombinationOfNumbersLettersandSpecialSymbols => "يجب ان تحتوي كلمة المرور على مجموعة من الأرقام والأحرف والرموز الخاصة";
 
   
 }

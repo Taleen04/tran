@@ -17,6 +17,7 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
         final response = await authRepo.login(event.phone, event.password,event.device_name,event.fcm,event.context);
         await SharedPrefHelper.setData(StorageKeys.token, response.token);
         await SharedPrefHelper.setData(StorageKeys.driver_id, response.staff.id);
+        await SharedPrefHelper.setData(StorageKeys.staffName, response.staff.name);
         emit(LogInSuccess(response.staff, response.token));
       } catch (e) {
         emit(LogFailure(e.toString()));

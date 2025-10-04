@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'package:ai_transport/src/core/constants/app_colors.dart';
 import 'package:ai_transport/src/core/constants/app_text_styling.dart';
 import 'package:ai_transport/src/core/constants/font_weight_helper.dart';
 import 'package:ai_transport/src/core/generated/l10n/app_localizations.dart';
 import 'package:ai_transport/src/core/utils/responsive_size_helper.dart';
+import 'package:ai_transport/src/core/utils/snack_bar_helper.dart';
 import 'package:ai_transport/src/feature/auth/data/models/staff_model.dart';
 import 'package:ai_transport/src/feature/home/domain/entities/order_entity.dart';
 import 'package:ai_transport/src/feature/home/domain/entities/request_status_entity.dart';
@@ -173,6 +175,7 @@ class _OrderListCardsInfoState extends State<OrderListCardsInfo> {
     );
     log("Driverid: ${widget.order.driverIds}");
     log("StaffId: ${widget.staff.id}");
+    log("staffName ${widget.staff.name}");
     String localizePlace(String? code) {
       switch ((code ?? '').toLowerCase()) {
         case 'airport':
@@ -487,15 +490,7 @@ class _OrderListCardsInfoState extends State<OrderListCardsInfo> {
       child: BlocConsumer<RequestTakeoverBloc, RequestTakeoverState>(
         listener: (context, state) {
           if (state is RequestTakeoverSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  'تم سحب الطلب بنجاح من ${state.takeoverResponse.data.previousDriver}',
-                ),
-                backgroundColor: AppColors.green,
-                duration: Duration(seconds: 3),
-              ),
-            );
+            SnackbarUtils.showSuccess(context, "تم سحب الطلب بنجاح");
             // تحديث قائمة الطلبات
             context.read<RequestStatusBloc>().add(
               request_status.RefreshRequestStatusEvent(),
@@ -552,14 +547,15 @@ class _OrderListCardsInfoState extends State<OrderListCardsInfo> {
 
   // عرض dialog تأكيد السحب
   void _showTakeoverDialog(BuildContext context) {
+     
     final previousDriverName =
-        widget.requestStatus?.acceptedByDriverName ?? 'السائق الأساسي';
+        widget.requestStatus?.acceptedByDriverName ?? widget.order.previousDriverName;
 
     showDialog(
       context: context,
       builder:
           (context) => TakeoverConfirmationDialog(
-            previousDriverName: previousDriverName,
+            previousDriverName:previousDriverName,
             requestId: widget.order.id,
             onConfirm: (reason) {
               context.read<RequestTakeoverBloc>().add(
