@@ -27,7 +27,7 @@ class ChatRepositoryImpl implements ChatRepository {
     required int requestId,
     required String messageType,
     String? message,
-    List<File>? attachments,
+    File? attachment,
     String? quickActionType,
   }) async {
     try {
@@ -35,7 +35,7 @@ class ChatRepositoryImpl implements ChatRepository {
         requestId: requestId,
         messageType: messageType,
         message: message,
-        attachments: attachments,
+        attachment: attachment,
         quickActionType: quickActionType,
       );
       return sentMessage;

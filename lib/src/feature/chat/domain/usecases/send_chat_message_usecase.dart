@@ -7,14 +7,14 @@ class SendChatMessageParams {
   final int requestId;
   final String messageType;
   final String? message;
-  final List<File>? attachments;
+  final File? attachment;
   final String? quickActionType;
 
   SendChatMessageParams({
     required this.requestId,
     required this.messageType,
     this.message,
-    this.attachments,
+    this.attachment,
     this.quickActionType,
   });
 }
@@ -31,7 +31,7 @@ class SendChatMessageUseCase
       requestId: params.requestId,
       messageType: params.messageType,
       message: params.message,
-      attachments: params.attachments,
+      attachment: params.attachment,
       quickActionType: params.quickActionType,
     );
   }

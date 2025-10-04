@@ -323,7 +323,7 @@ class _OrderListCardsInfoState extends State<OrderListCardsInfo> {
                 !(widget.order.driverIds.contains(widget.staff.id)))
               _buildTakeoverButton(context),
 
-            const SizedBox(width: 15),
+            Spacer(),
             BlocProvider(
               create:
                   (context) => RequestStatusBloc(
@@ -371,7 +371,7 @@ class _OrderListCardsInfoState extends State<OrderListCardsInfo> {
                       foregroundColor: AppColors.textPrimary,
                       padding: const EdgeInsets.symmetric(
                         vertical: 12,
-                        horizontal: 60,
+                        horizontal: 15,
                       ),
                     ),
                     onPressed: _getButtonOnPressed(
