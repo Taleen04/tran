@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:ai_transport/src/core/constants/app_colors.dart';
 import 'package:ai_transport/src/core/constants/app_spacing.dart';
 import 'package:ai_transport/src/core/constants/app_text_styling.dart';
@@ -7,6 +9,12 @@ import 'package:ai_transport/src/feature/profile/presentation/view_models/bloc/i
 import 'package:ai_transport/src/feature/profile/presentation/view_models/bloc/information_data_profile_bloc/get_user_profile_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ai_transport/src/core/generated/l10n/app_localizations.dart';
+
+import '../../../../../profile/data/data_source/online_status_data_sourse.dart';
+import '../../../../../profile/presentation/view_models/bloc/update_user_status/update_user_status_bloc.dart';
+import '../../../../../profile/presentation/view_models/bloc/update_user_status/update_user_status_event.dart';
+import '../../../../../profile/repo/online_status_repo.dart';
 
 class UserInfo extends StatefulWidget {
   const UserInfo({super.key});
@@ -44,10 +52,31 @@ class _UserInfoState extends State<UserInfo> {
                     ),
                   ),
                   SizedBox(height: responsiveWidth(context, 10)),
-                  Text(
-                    state.userProfile.serviceType ?? '',
+                  Row(
+                    children: [
+                      Text(
+                        isSwitched
+                            ? AppLocalizations.of(context)!.on
+                            : AppLocalizations.of(context)!.off,
+                        style: AppTextStyling.font14W500TextInter.copyWith(
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Switch(
+                        value: isSwitched,
+                        onChanged: (value) {
+                          toggleOnlineStatus(value);
+                        },
+                        activeColor: AppColors.primaryText,
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        state.userProfile.serviceType ?? '',
 
-                    style: AppTextStyling.font14W500TextInter,
+                        style: AppTextStyling.font14W500TextInter,
+                      ),
+                    ],
                   ),
                   SizedBox(height: responsiveHeight(context, 10)),
                 ],
@@ -82,5 +111,69 @@ class _UserInfoState extends State<UserInfo> {
         return const SizedBox.shrink();
       },
     );
+  }
+
+  final repo = OnlineStatusRepo(dataSource: OnlineStatusDataSource());
+
+  void toggleOnlineStatus(bool value) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      // إرسال القيمتين للـ API
+      final entity = await repo.updateOnlineStatus(
+        value, // online_status
+        value, // is_online
+      );
+
+      Navigator.of(context).pop();
+
+      setState(() {
+        isSwitched = entity.isOnline;
+      });
+
+      // ✅ إرسالها للـ Bloc
+      context.read<UpdateUserStatusBloc>().add(
+        UpdateUserStatusRequested(
+          onlineStatus: entity.isOnline,
+          isOnline: entity.isOnline,
+        ),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            entity.isOnline ? 'تم تفعيل حالتك بنجاح' : 'تم إلغاء تفعيل حالتك',
+            style: const TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    } catch (e) {
+      Navigator.of(context).pop();
+      log('Failed to update status: $e');
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+            'فشل في تحديث حالتك',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 3),
+          action: SnackBarAction(
+            label: 'إعادة المحاولة',
+            textColor: Colors.white,
+            onPressed: () {
+              toggleOnlineStatus(value);
+            },
+          ),
+        ),
+      );
+    }
   }
 }
