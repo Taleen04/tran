@@ -20,7 +20,6 @@ import 'package:ai_transport/src/feature/home/presentaion/view_model/request_sta
 import 'package:ai_transport/src/feature/home/presentaion/view_model/tasks_bloc/tasks_bloc.dart';
 import 'package:ai_transport/src/feature/home/repository/request_status_update_repo.dart';
 import 'package:ai_transport/src/feature/home/data/data_sources/request_status_update_data_source.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -36,41 +35,41 @@ class ToDoListCardsInfo extends StatefulWidget {
 class _OrderListCardsInfoState extends State<ToDoListCardsInfo> {
   int seconds = 300;
   Timer? _timer;
-  final player = AudioPlayer();
-  bool hasPlayed = false;
+ // final player = AudioPlayer();
+  //bool hasPlayed = false;
   bool acceptButton = false;
-  int remainingSeconds = 900;
+  //late int remainingSeconds;
 
-  Future<void> playNotificationSound() async {
-    for (int i = 0; i < 10; i++) {
-      await Future.delayed(const Duration(seconds: 60));
-      player.play(AssetSource("sounds/new-notification-025-380251.mp3"));
-    }
-  }
+  // Future<void> playNotificationSound() async {
+  //   for (int i = 0; i < 10; i++) {
+  //     await Future.delayed(const Duration(seconds: 60));
+  //     player.play(AssetSource("sounds/new-notification-025-380251.mp3"));
+  //   }
+  // }
 
-  void startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (acceptButton) {
-        _timer?.cancel();
-      } else if (seconds > 0) {
-        setState(() {
-          seconds--;
-        });
+  // void startTimer() {
+  //   _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+  //     if (acceptButton) {
+  //       _timer?.cancel();
+  //     } else if (seconds > 0) {
+  //       setState(() {
+  //         seconds--;
+  //       });
 
-        if (seconds == 120 && !hasPlayed) {
-          hasPlayed = true;
-          playNotificationSound();
-        }
-      } else {
-        _timer?.cancel();
-      }
-    });
-  }
+  //       if (seconds == 120 && !hasPlayed) {
+  //         hasPlayed = true;
+  //         playNotificationSound();
+  //       }
+  //     } else {
+  //       _timer?.cancel();
+  //     }
+  //   });
+  // }
 
   @override
   void initState() {
-    startTimer();
-    remainingSeconds = widget.order.minutesRemaining * 60;
+  //  startTimer();
+   // remainingSeconds = widget.order.minutesRemaining * 60;
     super.initState();
   }
 
@@ -185,6 +184,18 @@ class _OrderListCardsInfoState extends State<ToDoListCardsInfo> {
       log('Error launching phone call: $e');
     }
   }
+ 
+
+Future<void> launchWhatsApp(String phone) async {
+    final Uri url = Uri.parse("https://wa.me/$phone");
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'لا يمكن فتح واتساب';
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -204,18 +215,17 @@ class _OrderListCardsInfoState extends State<ToDoListCardsInfo> {
                 ),
               ),
             ),
-
-            GestureDetector(
-              onTap: () => _makePhoneCall(widget.order.client.phone),
-              child: Text(
-                'تواصل مع العميل',
-                style: AppTextStyling.font14W500TextInter.copyWith(
-                  color: AppColors.textWhite,
-                  fontSize: 12,
-                  fontWeight: FontWeightHelper.bold,
-                ),
-              ),
-            ),
+            Row(
+              children: [
+                         IconButton(onPressed: (){
+              _makePhoneCall(widget.order.client.phone);
+            }, icon: Icon(Icons.phone,color: AppColors.green.withOpacity(0.5))),
+             IconButton(onPressed: (){
+              launchWhatsApp(widget.order.client.phone);
+            }, icon: Icon(Icons.message,color: AppColors.backGroundIcon)),
+              ],
+            )
+           
           ],
         ),
 
@@ -263,6 +273,18 @@ class _OrderListCardsInfoState extends State<ToDoListCardsInfo> {
                   ),
                 ],
               ),
+              Column(
+                children: [
+                  Icon(Icons.timelapse, color: AppColors.orange),
+
+                  Text(
+                    formatTime(
+                      widget.order.minutesRemaining * 60,
+                    ), //! change to time remaining
+                    style: TextStyle(color: AppColors.textWhite),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -280,6 +302,32 @@ class _OrderListCardsInfoState extends State<ToDoListCardsInfo> {
           ),
           child: Text(
             widget.order.notes ?? AppLocalizations.of(context)!.ThereAreNoNotes,
+            style: AppTextStyling.font14W500TextInter.copyWith(
+              color: AppColors.green,
+              shadows: [
+                Shadow(
+                  color: AppColors.green.withOpacity(0.7),
+                  blurRadius: 6,
+                  offset: Offset(0, 0),
+                ),
+              ],
+            ),
+          ),
+        ),
+         SizedBox(height: responsiveHeight(context, 20)),
+         Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+          decoration: BoxDecoration(
+            color: AppColors.green.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: AppColors.green.withOpacity(0.5),
+              width: 0.5,
+            ),
+          ),
+          child: Text(
+           widget.order.currentStatus,
             style: AppTextStyling.font14W500TextInter.copyWith(
               color: AppColors.green,
               shadows: [
@@ -316,8 +364,9 @@ class _OrderListCardsInfoState extends State<ToDoListCardsInfo> {
                   //! refresh tasks list
                   if (context.mounted) {
                     context.read<TasksBloc>().add(
-                      const GetMyRequests(status: 'accepted'),
+                      GetMyRequests(status: widget.order.status),
                     );
+                    log("status: ${widget.order.status}");
                   }
                 }
               },
@@ -382,6 +431,11 @@ class _OrderListCardsInfoState extends State<ToDoListCardsInfo> {
               Icon(Icons.group, color: AppColors.textSecondary),
               widget.order.passengers.toString(),
             ),
+             const SizedBox(width: 15),
+            statItem(
+              widget.order.vehicleType=='car'?Icon(Icons.directions_car, color: AppColors.textSecondary):Icon(Icons.directions_bus, color: AppColors.textSecondary),
+               " "
+            ),
             const SizedBox(width: 15),
             statItem(
               Icon(Icons.shopping_bag, color: AppColors.textSecondary),
@@ -390,7 +444,12 @@ class _OrderListCardsInfoState extends State<ToDoListCardsInfo> {
             const SizedBox(width: 15),
             statItem(
               Icon(Icons.timelapse_outlined, color: AppColors.textSecondary),
-              formatTime(remainingSeconds),
+              formatTime(
+                widget.order.acceptanceDeadline
+                        ?.difference(DateTime.now())
+                        .inSeconds ??
+                    0,
+              ),
             ),
             const SizedBox(width: 15),
             // statItem(
@@ -421,7 +480,12 @@ class _OrderListCardsInfoState extends State<ToDoListCardsInfo> {
 }
 
 String formatTime(int seconds) {
-  final minutes = (seconds ~/ 60).toString().padLeft(2, '0');
+  if (seconds <= 0) return "00:00";
+
+  final hours = (seconds ~/ 3600).toString().padLeft(2, '0');
+  final minutes = ((seconds % 3600) ~/ 60).toString().padLeft(2, '0');
   final secs = (seconds % 60).toString().padLeft(2, '0');
-  return "$minutes:$secs";
+
+  // لو ما بدك الساعات، رجّعي "$minutes:$secs"
+  return hours != "00" ? "$hours:$minutes:$secs" : "$minutes:$secs";
 }

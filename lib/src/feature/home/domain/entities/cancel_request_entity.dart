@@ -39,7 +39,7 @@ enum CancellationReason {
   vehicleFailure('vehicle_failure'),
   unsuitableLuggage('unsuitable_luggage'),
   clientNotFound('client_not_found'),
-  weatherConditions('weather_conditions'),
+  //weatherConditions('weather_conditions'),
   other('other');
 
   const CancellationReason(this.value);

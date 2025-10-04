@@ -192,6 +192,7 @@ class StorageKeys {
   static const String locationStaff = 'locationStaff';
   static const String vehicle_type = 'vehicle_type';
   static const String driver_id="driver_id";
+  static const String staff_id="staff_id"; //log in
 }
 
 String checkIfUserSeenOnboarding() {

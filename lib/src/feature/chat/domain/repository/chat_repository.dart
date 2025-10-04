@@ -3,16 +3,18 @@ import 'package:ai_transport/src/feature/chat/domain/entities/chat_conversation_
 import 'package:ai_transport/src/feature/chat/domain/entities/chat_message_entity.dart';
 import 'dart:io';
 
+import '../../data/models/chat_message_model.dart';
+
 abstract class ChatRepository {
   Future<ChatConversationEntity> getChatConversation(int requestId);
   Future<ChatMessageEntity> sendChatMessage({
     required int requestId,
     required String messageType,
     String? message,
-    File? attachment,
+    List<File>? attachments,
     String? quickActionType,
   });
-  Future<Map<String, dynamic>> sendChatImage({
+  Future<ChatMessageModel> sendChatImage({
     required int requestId,
     required File image,
     String? caption,

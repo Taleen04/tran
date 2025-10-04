@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:ai_transport/src/core/usecases/usecase.dart';
 import 'package:ai_transport/src/feature/chat/domain/repository/chat_repository.dart';
 
+import '../../data/models/chat_message_model.dart';
+
 class SendChatImageParams {
   final int requestId;
   final File image;
@@ -15,13 +17,13 @@ class SendChatImageParams {
 }
 
 class SendChatImageUseCase
-    implements UseCase<Map<String, dynamic>, SendChatImageParams> {
+    implements UseCase<ChatMessageModel, SendChatImageParams> {
   final ChatRepository _repository;
 
   SendChatImageUseCase(this._repository);
 
   @override
-  Future<Map<String, dynamic>> call(SendChatImageParams params) async {
+  Future<ChatMessageModel> call(SendChatImageParams params) async {
     return await _repository.sendChatImage(
       requestId: params.requestId,
       image: params.image,

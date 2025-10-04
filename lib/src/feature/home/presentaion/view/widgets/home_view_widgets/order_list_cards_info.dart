@@ -34,7 +34,7 @@ class OrderListCardsInfo extends StatefulWidget {
     super.key,
     required this.order,
     this.requestStatus,
-    required this.staff
+    required this.staff,
   });
 
   @override
@@ -164,12 +164,15 @@ class _OrderListCardsInfoState extends State<OrderListCardsInfo> {
 
   @override
   Widget build(BuildContext context) {
-
-  log("Request status: ${widget.requestStatus?.status}");
-  log("Accepted by current driver: ${widget.requestStatus?.isAcceptedByCurrentDriver}");
-  log("Can show takeover button: ${((widget.requestStatus?.status.toLowerCase() ?? '') == 'accepted' && !(widget.requestStatus?.isAcceptedByCurrentDriver ?? false))}");
-  log("Driverid: ${widget.order.driverIds}");
-  log("StaffId: ${widget.staff.id}");
+    log("Request status: ${widget.requestStatus?.status}");
+    log(
+      "Accepted by current driver: ${widget.requestStatus?.isAcceptedByCurrentDriver}",
+    );
+    log(
+      "Can show takeover button: ${((widget.requestStatus?.status.toLowerCase() ?? '') == 'accepted' && !(widget.requestStatus?.isAcceptedByCurrentDriver ?? false))}",
+    );
+    log("Driverid: ${widget.order.driverIds}");
+    log("StaffId: ${widget.staff.id}");
     String localizePlace(String? code) {
       switch ((code ?? '').toLowerCase()) {
         case 'airport':
@@ -252,7 +255,6 @@ class _OrderListCardsInfoState extends State<OrderListCardsInfo> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
-                
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   userLocationContainer(
@@ -291,10 +293,9 @@ class _OrderListCardsInfoState extends State<OrderListCardsInfo> {
                   ),
                 ],
               ),
-              
+
               Column(
                 children: [
-                  
                   Icon(Icons.timelapse, color: AppColors.orange),
 
                   Text(
@@ -314,14 +315,14 @@ class _OrderListCardsInfoState extends State<OrderListCardsInfo> {
               formatTime(seconds),
             ),
             const SizedBox(width: 15),
-           
 
-               
             // زر سحب الطلب (يظهر فقط للطلبات المقبولة من سائق آخر)
-          if ((widget.requestStatus?.status.toLowerCase() ?? '') == 'accepted' &&
-    !(widget.requestStatus?.isAcceptedByCurrentDriver ?? false)&&!(widget.order.driverIds.contains(widget.staff.id)))
-  _buildTakeoverButton(context),
-              
+            if ((widget.requestStatus?.status.toLowerCase() ?? '') ==
+                    'accepted' &&
+                !(widget.requestStatus?.isAcceptedByCurrentDriver ?? false) &&
+                !(widget.order.driverIds.contains(widget.staff.id)))
+              _buildTakeoverButton(context),
+
             const SizedBox(width: 15),
             BlocProvider(
               create:
@@ -398,6 +399,13 @@ class _OrderListCardsInfoState extends State<OrderListCardsInfo> {
             statItem(
               Icon(Icons.group, color: AppColors.textSecondary),
               widget.order.passengers.toString(),
+            ),
+            const SizedBox(width: 15),
+            statItem(
+              widget.order.vehicleType == 'car'
+                  ? Icon(Icons.directions_car, color: AppColors.textSecondary)
+                  : Icon(Icons.directions_bus, color: AppColors.textSecondary),
+              " ",
             ),
             const SizedBox(width: 15),
             statItem(
