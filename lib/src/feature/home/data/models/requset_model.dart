@@ -47,6 +47,7 @@ class MyRequestModel {
   final String vehicleType;
   final int passengers;
   final int bags;
+  final int? conversationId;
   final String? notes;
   final String currentStatus;
   final int minutesRemaining;
@@ -74,6 +75,7 @@ class MyRequestModel {
     required this.previousDriverName,
     required this.origin,
     required this.destination,
+    this.conversationId,
     required this.vehicleType,
     required this.passengers,
     required this.currentStatus,
@@ -118,6 +120,7 @@ class MyRequestModel {
       id: json['id'] as int,
       previousDriverName: json['driver'] != null ? json['driver']['name'] ?? "" : "",
       currentStatus: json['current_status'] ?? "",
+      conversationId: json['conversation_id'] as int?,
       currentStatusTypes: Map<String, String>.from(json['current_status_types']),
       status: json['status'] as String,
       client: ClientModel.fromJson(json['client'] as Map<String, dynamic>),
@@ -161,6 +164,7 @@ class MyRequestModel {
   RequestEntity toEntity() {
     return RequestEntity(
       id: id,
+      conversationId: conversationId,
       previousDriverName: previousDriverName,
       currentStatus: currentStatus,
       currentStatusTypes: currentStatusTypes,

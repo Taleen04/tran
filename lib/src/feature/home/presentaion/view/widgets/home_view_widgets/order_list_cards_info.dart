@@ -141,7 +141,6 @@ class _OrderListCardsInfoState extends State<OrderListCardsInfo> {
     }
     startRemainingTimer();
     super.initState();
-    //staffLocation = SharedPrefHelper.getString(StorageKeys.locationStaff);
   }
 
   void stopAllSounds() {
@@ -296,17 +295,20 @@ class _OrderListCardsInfoState extends State<OrderListCardsInfo> {
                   ),
                 ],
               ),
-
-              Column(
-                children: [
-                  Icon(Icons.timelapse, color: AppColors.orange),
-
-                  Text(
-                    formatTime(remainingSeconds),
+              widget.order.acceptanceTimedOut || remainingSeconds == 0
+                  ? Text(
+                    "الوقت انتهي",
                     style: TextStyle(color: AppColors.textWhite),
+                  )
+                  : Column(
+                    children: [
+                      Icon(Icons.timelapse, color: AppColors.orange),
+                      Text(
+                        formatTime(remainingSeconds),
+                        style: TextStyle(color: AppColors.textWhite),
+                      ),
+                    ],
                   ),
-                ],
-              ),
             ],
           ),
         ),
@@ -547,15 +549,15 @@ class _OrderListCardsInfoState extends State<OrderListCardsInfo> {
 
   // عرض dialog تأكيد السحب
   void _showTakeoverDialog(BuildContext context) {
-     
     final previousDriverName =
-        widget.requestStatus?.acceptedByDriverName ?? widget.order.previousDriverName;
+        widget.requestStatus?.acceptedByDriverName ??
+        widget.order.previousDriverName;
 
     showDialog(
       context: context,
       builder:
           (context) => TakeoverConfirmationDialog(
-            previousDriverName:previousDriverName,
+            previousDriverName: previousDriverName,
             requestId: widget.order.id,
             onConfirm: (reason) {
               context.read<RequestTakeoverBloc>().add(

@@ -153,7 +153,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             if(event.eventName == "message.sent"){
               var data = jsonDecode(event.data);
               var message = data["message"];
-              print(message);
               var messageEntity = ChatMessageEntity(id: message["id"], senderType: message["sender"]["role"], senderName: message["sender"]["name"], isRead: message["is_read"], isSystem: message["sender"]["is_system"], type: message["type"], content: message["content"], file: message["file"], formattedTime: message["formatted_time"]);
               add(PusherMessageReceived(messageEntity)); // ✅ fire event, not emit
 

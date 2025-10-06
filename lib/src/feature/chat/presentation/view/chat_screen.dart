@@ -12,13 +12,11 @@ import '../widgets/chat_header.dart';
 
 class ChatScreen extends StatefulWidget {
   final int requestId;
-  final int conversationId;
   final String clientName;
 
   const ChatScreen({
     super.key,
     required this.requestId,
-    required this.conversationId,
     required this.clientName,
   });
 
@@ -34,9 +32,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     // Initialize Pusher and load chat conversation
-    context.read<ChatBloc>().add(
-      InitializePusherEvent(conversationId: widget.conversationId),
-    );
+
     context.read<ChatBloc>().add(GetChatConversationEvent(widget.requestId));
   }
 
@@ -83,8 +79,16 @@ class _ChatScreenState extends State<ChatScreen> {
                 listener: (context, state) {
                   if (state is ChatConversationLoaded ||
                       state is ChatMessageSent ||
-                      state is ChatImageSent || state is PusherSend) {
+                      state is ChatImageSent ||
+                      state is PusherSend) {
                     _scrollToBottom();
+                  }
+                  if (state is ChatConversationLoaded) {
+                    context.read<ChatBloc>().add(
+                      InitializePusherEvent(
+                        conversationId: state.conversation.conversationId,
+                      ),
+                    );
                   }
                 },
                 builder: (context, state) {
@@ -95,7 +99,10 @@ class _ChatScreenState extends State<ChatScreen> {
                         color: Color(0xFFFFA726),
                       ),
                     );
-                  } else if (state is ChatConversationLoaded || state is ChatImageSent || state is ChatMessageSent|| state is PusherSend) {
+                  } else if (state is ChatConversationLoaded ||
+                      state is ChatImageSent ||
+                      state is ChatMessageSent ||
+                      state is PusherSend) {
                     return ListView.builder(
                       controller: _scrollController,
                       padding: const EdgeInsets.all(16),
@@ -172,7 +179,7 @@ class _ChatScreenState extends State<ChatScreen> {
       context.read<ChatBloc>().add(
         SendChatMessageEvent(
           requestId: widget.requestId,
-          messageType:  'text',
+          messageType: 'text',
           message: message,
         ),
       );

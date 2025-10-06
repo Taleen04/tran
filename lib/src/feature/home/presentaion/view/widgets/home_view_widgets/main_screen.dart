@@ -41,7 +41,6 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // bool isEnglish = context.watch<LanguageCubit>().state.locale.languageCode == 'en';
 
     return BlocBuilder<NavBloc, NavState>(
       builder: (context, state) {

@@ -27,6 +27,18 @@ class SectionHeader extends StatelessWidget {
             TabBar(
               indicatorColor: AppColors.orange,
               labelStyle: AppTextStyling.heading3,
+              onTap: (value) {
+                if(value ==0){
+                  context.read<TasksBloc>().add(
+                    const GetMyRequests(status: 'accepted'),
+                  );
+                }else{
+                  context.read<OrdersBloc>().add(
+                    FetchOrders(vehicleType: "car", urgentOnly: true),
+                  );
+                }
+              },
+
               tabs: [
                 // تبويب المهام
                 Tab(

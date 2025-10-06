@@ -18,6 +18,7 @@ class RequestEntity {
   final int bags;
   final String? notes;
   final int minutesRemaining;
+  final int? conversationId;
   final List<int>? timeRemaining;
   final int priorityLevel;
   final DateTime? acceptanceDeadline;
@@ -44,6 +45,7 @@ class RequestEntity {
     required this.origin,
     required this.previousDriverName,
     required this.destination,
+    this.conversationId,
     required this.vehicleType,
     required this.passengers,
     required this.currentStatus,

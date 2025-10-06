@@ -105,10 +105,9 @@ class AppRouter {
           final requestId =
               int.tryParse(state.pathParameters['requestId'] ?? '0') ?? 0;
           final clientName = state.uri.queryParameters['clientName'] ?? 'عميل';
-          final int conversationId = int.tryParse(state.uri.queryParameters['conversationId'] ?? '0')?? 0;
 
           return ChatProvider.provideChatBloc(
-            child: ChatScreen(requestId: requestId, clientName: clientName,conversationId: conversationId,),
+            child: ChatScreen(requestId: requestId, clientName: clientName),
           );
         },
       ),

@@ -189,6 +189,7 @@ class StorageKeys {
   static const String Language = 'Language';
   static const String notification = 'notification';
   static const String current_status = "current_status";
+  static const String available_status = "available_status";
   static const String locationStaff = 'locationStaff';
   static const String vehicle_type = 'vehicle_type';
   static const String driver_id = "driver_id";

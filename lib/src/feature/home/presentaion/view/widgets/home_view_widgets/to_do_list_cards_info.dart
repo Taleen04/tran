@@ -22,7 +22,9 @@ import 'package:ai_transport/src/feature/home/repository/request_status_update_r
 import 'package:ai_transport/src/feature/home/data/data_sources/request_status_update_data_source.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ToDoListCardsInfo extends StatefulWidget {
   final RequestEntity order;
@@ -35,7 +37,7 @@ class ToDoListCardsInfo extends StatefulWidget {
 class _OrderListCardsInfoState extends State<ToDoListCardsInfo> {
   int seconds = 300;
   Timer? _timer;
- // final player = AudioPlayer();
+  // final player = AudioPlayer();
   //bool hasPlayed = false;
   bool acceptButton = false;
   //late int remainingSeconds;
@@ -68,8 +70,8 @@ class _OrderListCardsInfoState extends State<ToDoListCardsInfo> {
 
   @override
   void initState() {
-  //  startTimer();
-   // remainingSeconds = widget.order.minutesRemaining * 60;
+    //  startTimer();
+    // remainingSeconds = widget.order.minutesRemaining * 60;
     super.initState();
   }
 
@@ -184,9 +186,8 @@ class _OrderListCardsInfoState extends State<ToDoListCardsInfo> {
       log('Error launching phone call: $e');
     }
   }
- 
 
-Future<void> launchWhatsApp(String phone) async {
+  Future<void> launchWhatsApp(String phone) async {
     final Uri url = Uri.parse("https://wa.me/$phone");
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
@@ -194,8 +195,6 @@ Future<void> launchWhatsApp(String phone) async {
       throw 'لا يمكن فتح واتساب';
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -217,15 +216,34 @@ Future<void> launchWhatsApp(String phone) async {
             ),
             Row(
               children: [
-                         IconButton(onPressed: (){
-              _makePhoneCall(widget.order.client.phone);
-            }, icon: Icon(Icons.phone,color: AppColors.green.withOpacity(0.5))),
-             IconButton(onPressed: (){
-              launchWhatsApp(widget.order.client.phone);
-            }, icon: Icon(Icons.message,color: AppColors.backGroundIcon)),
+                IconButton(
+                  onPressed: () {
+                    _makePhoneCall(widget.order.client.phone);
+                  },
+                  icon: Icon(
+                    Icons.phone,
+                    color: AppColors.green.withOpacity(0.5),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    launchWhatsApp(widget.order.client.phone);
+                  },
+                  icon: FaIcon(
+                    FontAwesomeIcons.whatsapp,
+                    color: AppColors.green.withOpacity(0.5),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    context.go(
+                      '/chat/${widget.order.id}?clientName=${widget.order.client.name}&requestId=${widget.order.client}',
+                    );
+                  },
+                  icon: Icon(Icons.chat, color: AppColors.backGroundIcon),
+                ),
               ],
-            )
-           
+            ),
           ],
         ),
 
@@ -314,8 +332,8 @@ Future<void> launchWhatsApp(String phone) async {
             ),
           ),
         ),
-         SizedBox(height: responsiveHeight(context, 20)),
-         Container(
+        SizedBox(height: responsiveHeight(context, 20)),
+        Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
           decoration: BoxDecoration(
@@ -327,7 +345,7 @@ Future<void> launchWhatsApp(String phone) async {
             ),
           ),
           child: Text(
-           widget.order.currentStatus,
+            widget.order.currentStatus,
             style: AppTextStyling.font14W500TextInter.copyWith(
               color: AppColors.green,
               shadows: [
@@ -431,10 +449,12 @@ Future<void> launchWhatsApp(String phone) async {
               Icon(Icons.group, color: AppColors.textSecondary),
               widget.order.passengers.toString(),
             ),
-             const SizedBox(width: 15),
+            const SizedBox(width: 15),
             statItem(
-              widget.order.vehicleType=='car'?Icon(Icons.directions_car, color: AppColors.textSecondary):Icon(Icons.directions_bus, color: AppColors.textSecondary),
-               " "
+              widget.order.vehicleType == 'car'
+                  ? Icon(Icons.directions_car, color: AppColors.textSecondary)
+                  : Icon(Icons.directions_bus, color: AppColors.textSecondary),
+              " ",
             ),
             const SizedBox(width: 15),
             statItem(

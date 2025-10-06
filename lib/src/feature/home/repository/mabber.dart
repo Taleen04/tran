@@ -13,6 +13,7 @@ class RequestMapper {
     return RequestEntity(
       id: model.id,
       previousDriverName: model.previousDriverName,
+      conversationId: model.conversationId,
       currentStatus: model.currentStatus,
       currentStatusTypes: model.currentStatusTypes,
       status: model.status,

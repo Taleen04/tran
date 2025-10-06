@@ -61,6 +61,7 @@ class StaffProfileModel extends StaffProfileEntity {
     required super.id,
     required super.name,
     required super.phone,
+    required super.isOnline,
     super.email,
 
     required super.address,
@@ -106,6 +107,7 @@ class StaffProfileModel extends StaffProfileEntity {
       id: staff['id'] ?? 0,
       name: staff['name'] ?? '',
       phone: staff['phone'] ?? '',
+      isOnline: staff['is_online'] ?? false,
       email:
           (staff['email'] as String?)?.isNotEmpty == true
               ? staff['email'] as String?

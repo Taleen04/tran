@@ -23,6 +23,7 @@ class ApiConstants {
   static const String cancellationReason = 'requests/cancellation-reasons';
   static const String locationStatus = 'profile/location-status';
   static const String onlineStatus = 'profile/online-status';
+  static const String availableStatus = 'profile/availability-status';
   static const String changePassword = "profile/change-password";
   // =====================
   // 🟨 Clients

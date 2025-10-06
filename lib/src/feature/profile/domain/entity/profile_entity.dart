@@ -38,6 +38,7 @@ class StaffProfileEntity {
   final String longitude;
   final String rating;
   final String serviceType;
+  final bool isOnline;
   final String currentStatus;
   final String manualLocationStatus;
 
@@ -57,6 +58,7 @@ class StaffProfileEntity {
     required this.id,
     required this.name,
     required this.phone,
+    required this.isOnline,
     this.email,
     required this.address,
     required this.latitude,
@@ -90,12 +92,14 @@ class StaffProfileEntity {
     String? nonConvictionCertificate,
     String? licenseImage,
     String? licenseExpiry,
+    bool? isOnline,
     TransportCompanyEntity? transportCompany,
   }) {
     return StaffProfileEntity(
       id: id ?? this.id,
       name: name ?? this.name,
       phone: phone ?? this.phone,
+      isOnline: isOnline ?? this.isOnline,
       email: email ?? this.email,
       address: address ?? this.address,
       latitude: latitude ?? this.latitude,

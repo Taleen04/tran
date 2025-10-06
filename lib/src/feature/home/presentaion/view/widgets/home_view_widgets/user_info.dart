@@ -25,6 +25,14 @@ class UserInfo extends StatefulWidget {
 class _UserInfoState extends State<UserInfo> {
   bool isOnline = false;
 bool onlineStatus = false;
+bool isAvailable = false;
+
+@override
+  void initState() {
+    // TODO: implement initState
+  getProfile();
+    super.initState();
+  }
 
 final repo = OnlineStatusRepo(dataSource: OnlineStatusDataSource());
   void toggleOnlineStatus(bool value) async {
@@ -88,6 +96,75 @@ final repo = OnlineStatusRepo(dataSource: OnlineStatusDataSource());
       );
     }
   }
+  void toggleAvailableStatus(bool value) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      // إرسال القيمتين للـ API
+      final entity = await repo.updateAvailableStatus(
+        value ? "available" : "busy",
+      );
+
+      Navigator.of(context).pop();
+
+      setState(() {
+
+        isAvailable = entity.currentStatus == "available";
+      });
+
+      // // ✅ إرسالها للـ Bloc
+      // context.read<UpdateUserStatusBloc>().add(
+      //   UpdateUserStatusRequested(
+      //     onlineStatus: entity.isOnline,
+      //     isOnline: entity.isOnline,
+      //   ),
+      // );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            entity.isOnline ? 'تم تفعيل حالتك بنجاح' : 'تم إلغاء تفعيل حالتك',
+            style: const TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    } catch (e) {
+      Navigator.of(context).pop();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+            'فشل في تحديث حالتك',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 3),
+          action: SnackBarAction(
+            label: 'إعادة المحاولة',
+            textColor: Colors.white,
+            onPressed: () {
+              toggleOnlineStatus(value);
+            },
+          ),
+        ),
+      );
+    }
+  }
+  void getProfile()async{
+    final entity = await repo.getUserProfile();
+    setState(() {
+
+      isAvailable = entity.currentStatus == "available";
+      isOnline = entity.isOnline;
+      onlineStatus = entity.isOnline;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<GetUserProfileBloc, GetUserProfileState>(
@@ -143,6 +220,27 @@ final repo = OnlineStatusRepo(dataSource: OnlineStatusDataSource());
                     ],
                   ),
                   SizedBox(height: responsiveHeight(context, 10)),
+                  Row(
+                    children: [
+                      Text(
+                        isAvailable
+                            ? "Available"
+                            : "Busy",
+                        style: AppTextStyling.font14W500TextInter.copyWith(
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Switch(
+                        value: isAvailable,
+                        onChanged: (value) {
+                          toggleAvailableStatus(value);
+                        },
+                        activeColor: AppColors.primaryText,
+                      ),
+
+                    ],
+                  ),
 
                 ],
               ),
