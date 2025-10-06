@@ -1,9 +1,10 @@
 import 'dart:developer';
 import 'dart:io';
-
+import 'package:ai_transport/l10n/app_localizations.dart' hide AppLocalizations;
 import 'package:ai_transport/src/core/constants/app_colors.dart';
 import 'package:ai_transport/src/core/constants/app_text_styling.dart';
 import 'package:ai_transport/src/core/constants/font_weight_helper.dart';
+import 'package:ai_transport/src/core/generated/l10n/app_localizations.dart';
 import 'package:ai_transport/src/core/utils/map_helper.dart';
 import 'package:ai_transport/src/feature/profile/domain/entity/profile_entity.dart';
 import 'package:ai_transport/src/feature/profile/presentation/view_models/bloc/edit_profile_bloc/edit_profile_bloc.dart';
@@ -39,7 +40,8 @@ class _EditProfileViewState extends State<EditProfileView> {
   late TextEditingController phoneController;
   late TextEditingController addressController;
 
-  // متغيرات الصور
+  final _formKey = GlobalKey<FormState>();
+
   File? _idCardImageFile;
   File? _ungovernedImageFile;
   File? _carLicenseFile;
@@ -66,20 +68,11 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   String _buildImageUrl(String? imageUrl) {
     if (imageUrl == null || imageUrl.isEmpty) return '';
-
-    // إذا كان المسار يحتوي على URL كامل، استخدمه مباشرة
-    if (imageUrl.startsWith('http')) {
-      return imageUrl;
-    }
-
-    // إذا كان المسار نسبي، أضف البادئة
+    if (imageUrl.startsWith('http')) return imageUrl;
     const baseUrl = 'https://parking.engmahmoudali.com/storage/';
-    if (imageUrl.startsWith('storage/')) {
-      return '$baseUrl$imageUrl';
-    }
-
-    // إذا لم تكن البادئة موجودة، أضفها
-    return '$baseUrl$imageUrl';
+    return imageUrl.startsWith('storage/')
+        ? '$baseUrl$imageUrl'
+        : '$baseUrl$imageUrl';
   }
 
   Future<void> _pickAndUploadImage({
@@ -101,9 +94,8 @@ class _EditProfileViewState extends State<EditProfileView> {
 
         final result = await uploadFunction(file);
         if (result['success']) {
-          if (mounted && widget.onProfileUpdated != null) {
+          if (mounted && widget.onProfileUpdated != null)
             widget.onProfileUpdated!();
-          }
         } else {
           _showErrorSnackBar(result['error']);
         }
@@ -139,7 +131,6 @@ class _EditProfileViewState extends State<EditProfileView> {
       );
 
       if (mounted) Navigator.pop(context);
-
       addressController.text = address;
 
       if (mounted) {
@@ -154,6 +145,12 @@ class _EditProfileViewState extends State<EditProfileView> {
       if (mounted) Navigator.pop(context);
       _showErrorSnackBar('خطأ في الحصول على الموقع: $e');
     }
+  }
+
+  bool _validateEmail(String? email) {
+    if (email == null || email.isEmpty) return true; // اختياري
+    final regex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return regex.hasMatch(email);
   }
 
   @override
@@ -171,7 +168,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                 duration: Duration(seconds: 2),
               ),
             );
-
             Future.delayed(const Duration(milliseconds: 500), () {
               if (context.mounted) context.pop();
             });
@@ -201,127 +197,126 @@ class _EditProfileViewState extends State<EditProfileView> {
                 backgroundColor: AppColors.orange,
                 centerTitle: true,
                 title: Text(
-                  'تعديل البروفايل',
+                AppLocalizations.of(context)!.updateProfile,
                   style: AppTextStyling.font14W500TextInter.copyWith(
                     fontWeight: FontWeightHelper.medium,
                   ),
                 ),
               ),
-              body: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 20),
-                    _buildTextField('الاسم', nameController, borderColor),
-                    const SizedBox(height: 16),
-                    _buildTextField(
-                      'البريد الالكتروني',
-                      emailController,
-                      borderColor,
-                    ),
-                    const SizedBox(height: 16),
-                    _buildTextField('رقم الجوال', phoneController, borderColor),
-                    const SizedBox(height: 16),
-                    _buildAddressField(
-                      'العنوان',
-                      addressController,
-                      borderColor,
-                    ),
-                    const SizedBox(height: 30),
-                    // صور الوثائق
-                    _buildImageSection(
-                      'صورة الهوية',
-                      _idCardImageFile,
-                      widget.user.identityImage,
-                      Icons.credit_card,
-                      () => _pickAndUploadImage(
-                        imageFile: _idCardImageFile,
-                        uploadFunction:
-                            widget.repository.uploadIdCard, // بدون ()
-                        setImageFile: (file) => _idCardImageFile = file,
+              body: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      _buildTextField(
+                        AppLocalizations.of(context)!.name,
+                        nameController,
+                        borderColor,
+                        requiredField: true,
                       ),
-                    ),
-                    _buildImageSection(
-                      'صورة عدم المحكومية',
-                      _ungovernedImageFile,
-                      widget.user.nonConvictionCertificate,
-                      Icons.description,
-                      () => _pickAndUploadImage(
-                        imageFile: _ungovernedImageFile,
-                        uploadFunction: widget.repository.uploadUngoverned,
-                        setImageFile: (file) => _ungovernedImageFile = file,
+                      const SizedBox(height: 16),
+                      _buildTextField(
+                        AppLocalizations.of(context)!.email,
+                        emailController,
+                        borderColor,
+                        emailField: true,
                       ),
-                    ),
-
-                    _buildImageSection(
-                      'صورة الرخصة',
-                      _carLicenseFile,
-                      widget.user.licenseImage,
-                      Icons.credit_card,
-                      () => _pickAndUploadImage(
-                        imageFile: _carLicenseFile,
-                        uploadFunction: widget.repository.uploadCarLicense,
-                        setImageFile: (file) => _carLicenseFile = file,
+                      const SizedBox(height: 16),
+                      _buildTextField(
+                         AppLocalizations.of(context)!.phoneNumber,
+                        phoneController,
+                        borderColor,
+                        requiredField: true,
+                        phoneField: true,
                       ),
-                    ),
-
-                    const SizedBox(height: 30),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              buttonEnabled ? AppColors.orange : Colors.grey,
+                      const SizedBox(height: 16),
+                      _buildAddressField(
+                        AppLocalizations.of(context)!.address,
+                        addressController,
+                        borderColor,
+                      ),
+                      const SizedBox(height: 30),
+                      _buildImageSection(
+                        AppLocalizations.of(context)!.Id,
+                        _idCardImageFile,
+                        widget.user.identityImage,
+                        Icons.credit_card,
+                        () => _pickAndUploadImage(
+                          imageFile: _idCardImageFile,
+                          uploadFunction: widget.repository.uploadIdCard,
+                          setImageFile: (file) => _idCardImageFile = file,
                         ),
-                        onPressed:
-                        
-                            buttonEnabled
-                                ? () {
-                                  context.pop();
-                                  if (nameController.text.trim().isEmpty) {
-                                    _showErrorSnackBar('يرجى إدخال الاسم');
-                                    return;
-                                  }
-                                  if (phoneController.text.trim().isEmpty) {
-                                    _showErrorSnackBar('يرجى إدخال رقم الهاتف');
-                                    return;
-                                  }
-                                  if (addressController.text.trim().isEmpty) {
-                                    _showErrorSnackBar('يرجى إدخال العنوان');
-                                    return;
-                                  }
-                                      
-                                  final updatedUser = widget.user.copyWith(
-                                    name: nameController.text.trim(),
-                                    email:
-                                        emailController.text.trim().isNotEmpty
-                                            ? emailController.text.trim()
-                                            : null,
-                                    phone: phoneController.text.trim(),
-                                    address: addressController.text.trim(),
-                                  );
-
-                                  context.read<EditProfileBloc>().add(
-                                    UpdateProfile(updatedUser),
-                                  );
-                                }
-                                : null,
-                        child:
-                            state is EditProfileLoading
-                                ? const CircularProgressIndicator(
-                                  color: Colors.white,
-                                )
-                                : Text(
-                                  'حفظ التغييرات',
-                                  style: AppTextStyling.font14W500TextInter
-                                      .copyWith(
-                                        fontWeight: FontWeightHelper.bold,
-                                      ),
-                                ),
                       ),
-                    ),
-                  ],
+                      _buildImageSection(
+                         AppLocalizations.of(context)!.CertificateOfNoCriminalRecord,
+                        _ungovernedImageFile,
+                        widget.user.nonConvictionCertificate,
+                        Icons.description,
+                        () => _pickAndUploadImage(
+                          imageFile: _ungovernedImageFile,
+                          uploadFunction: widget.repository.uploadUngoverned,
+                          setImageFile: (file) => _ungovernedImageFile = file,
+                        ),
+                      ),
+                      _buildImageSection(
+                         AppLocalizations.of(context)!.VehicleLicense,
+                        _carLicenseFile,
+                        widget.user.licenseImage,
+                        Icons.credit_card,
+                        () => _pickAndUploadImage(
+                          imageFile: _carLicenseFile,
+                          uploadFunction: widget.repository.uploadCarLicense,
+                          setImageFile: (file) => _carLicenseFile = file,
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                buttonEnabled ? AppColors.orange : Colors.grey,
+                          ),
+                          onPressed:
+                              buttonEnabled
+                                  ? () {
+                                    if (!_formKey.currentState!.validate())
+                                      return;
+
+                                    final updatedUser = widget.user.copyWith(
+                                      name: nameController.text.trim(),
+                                      email:
+                                          emailController.text.trim().isNotEmpty
+                                              ? emailController.text.trim()
+                                              : null,
+                                      phone: phoneController.text.trim(),
+                                      address: addressController.text.trim(),
+                                    );
+
+                                    context.read<EditProfileBloc>().add(
+                                      UpdateProfile(updatedUser),
+                                    );
+                                  }
+                                  : null,
+                          child:
+                              state is EditProfileLoading
+                                  ? const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                  : Text(
+                                     AppLocalizations.of(context)!.save,
+                                    style: AppTextStyling.font14W500TextInter
+                                        .copyWith(
+                                          fontWeight: FontWeightHelper.bold,
+                                        ),
+                                  ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -334,23 +329,41 @@ class _EditProfileViewState extends State<EditProfileView> {
   Widget _buildTextField(
     String label,
     TextEditingController controller,
-    Color borderColor,
-  ) => TextField(
-    controller: controller,
-    style: AppTextStyling.font14W500TextInter.copyWith(
-      fontWeight: FontWeightHelper.medium,
-    ),
-    decoration: InputDecoration(
-      labelText: label,
-      labelStyle: TextStyle(color: AppColors.backGroundIcon),
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: borderColor),
+    Color borderColor, {
+    bool requiredField = false,
+    bool emailField = false,
+    bool phoneField = false,
+  }) {
+    return TextFormField(
+      controller: controller,
+      style: AppTextStyling.font14W500TextInter.copyWith(
+        fontWeight: FontWeightHelper.medium,
       ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: borderColor),
+      validator: (value) {
+        if (requiredField && (value == null || value.trim().isEmpty))
+          return 'يرجى إدخال $label';
+        if (emailField &&
+            value != null &&
+            value.isNotEmpty &&
+            !_validateEmail(value))
+          return 'يرجى إدخال بريد إلكتروني صحيح';
+        if (phoneField && value != null && value.trim().length < 10)
+          return 'رقم الجوال يجب أن لا يقل عن 10 أرقام';
+        return null;
+      },
+      keyboardType: phoneField ? TextInputType.phone : TextInputType.text,
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(color: AppColors.backGroundIcon),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: borderColor),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: borderColor),
+        ),
       ),
-    ),
-  );
+    );
+  }
 
   Widget _buildAddressField(
     String label,
@@ -381,7 +394,7 @@ class _EditProfileViewState extends State<EditProfileView> {
       child: Row(
         children: [
           Expanded(
-            child: TextField(
+            child: TextFormField(
               controller: controller,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(

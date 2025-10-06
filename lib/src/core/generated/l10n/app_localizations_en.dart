@@ -274,4 +274,32 @@ class AppLocalizationsEn extends AppLocalizations {
   
   @override
   String get editOrder => "Edit Order";
+  
+  @override
+  // TODO: implement name
+  String get name => "Name";
+  
+  @override
+  // TODO: implement save
+  String get save => "Save";
+  
+  @override
+  // TODO: implement updateProfile
+  String get updateProfile => "Update Profile";
+  
+  @override
+  // TODO: implement changePassword
+  String get changePassword => "Change Password";
+  
+  @override
+  // TODO: implement currentPassword
+  String get currentPassword => "Current Password";
+  
+  @override
+  // TODO: implement newPassword
+  String get newPassword => "New Password";
+  
+  @override
+  // TODO: implement thePasswordMustContainACombinationOfNumbersLettersandSpecialSymbols
+  String get thePasswordMustContainACombinationOfNumbersLettersandSpecialSymbols => "The Password Must Contain a Combination Of Numbers Letters and Special Symbols";
 }

@@ -64,11 +64,14 @@ class MyRequestModel {
   final double? estimatedDistance;
   final double? estimatedDuration;
   final List<int> driverIds;
+  final String previousDriverName;
+
 
   MyRequestModel({
     required this.id,
     required this.status,
     required this.client,
+    required this.previousDriverName,
     required this.origin,
     required this.destination,
     required this.vehicleType,
@@ -113,6 +116,7 @@ class MyRequestModel {
 
     return MyRequestModel(
       id: json['id'] as int,
+      previousDriverName: json['driver'] != null ? json['driver']['name'] ?? "" : "",
       currentStatus: json['current_status'] ?? "",
       currentStatusTypes: Map<String, String>.from(json['current_status_types']),
       status: json['status'] as String,
@@ -157,6 +161,7 @@ class MyRequestModel {
   RequestEntity toEntity() {
     return RequestEntity(
       id: id,
+      previousDriverName: previousDriverName,
       currentStatus: currentStatus,
       currentStatusTypes: currentStatusTypes,
       status: status,

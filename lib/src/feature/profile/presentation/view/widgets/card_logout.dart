@@ -29,74 +29,74 @@ class SettingsCard extends StatefulWidget {
 }
 
 class _SettingsCardState extends State<SettingsCard> {
-  bool isOnline = false;
-  bool onlineStatus = false;
-  String currentStatus = 'offline';
+  // bool isOnline = false;
+  // bool onlineStatus = false;
+  // String currentStatus = 'offline';
 
-  final repo = OnlineStatusRepo(dataSource: OnlineStatusDataSource());
-
-  void toggleOnlineStatus(bool value) async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => const Center(child: CircularProgressIndicator()),
-    );
-
-    try {
-      // إرسال القيمتين للـ API
-      final entity = await repo.updateOnlineStatus(
-        value, // online_status
-        value, // is_online
-      );
-
-      Navigator.of(context).pop();
-
-      setState(() {
-        isOnline = entity.isOnline;
-        onlineStatus = entity.isOnline;
-      });
-
-      // ✅ إرسالها للـ Bloc
-      context.read<UpdateUserStatusBloc>().add(
-        UpdateUserStatusRequested(
-          onlineStatus: entity.isOnline,
-          isOnline: entity.isOnline,
-        ),
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            entity.isOnline ? 'تم تفعيل حالتك بنجاح' : 'تم إلغاء تفعيل حالتك',
-            style: const TextStyle(color: Colors.white),
-          ),
-          backgroundColor: Colors.green,
-          duration: const Duration(seconds: 2),
-        ),
-      );
-    } catch (e) {
-      Navigator.of(context).pop();
-      log('Failed to update status: $e');
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text(
-            'فشل في تحديث حالتك',
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: Colors.red,
-          duration: const Duration(seconds: 3),
-          action: SnackBarAction(
-            label: 'إعادة المحاولة',
-            textColor: Colors.white,
-            onPressed: () {
-              toggleOnlineStatus(value);
-            },
-          ),
-        ),
-      );
-    }
-  }
+  // final repo = OnlineStatusRepo(dataSource: OnlineStatusDataSource());
+  //
+  // void toggleOnlineStatus(bool value) async {
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (_) => const Center(child: CircularProgressIndicator()),
+  //   );
+  //
+  //   try {
+  //     // إرسال القيمتين للـ API
+  //     final entity = await repo.updateOnlineStatus(
+  //       value, // online_status
+  //       value, // is_online
+  //     );
+  //
+  //     Navigator.of(context).pop();
+  //
+  //     setState(() {
+  //       isOnline = entity.isOnline;
+  //       onlineStatus = entity.isOnline;
+  //     });
+  //
+  //     // ✅ إرسالها للـ Bloc
+  //     context.read<UpdateUserStatusBloc>().add(
+  //       UpdateUserStatusRequested(
+  //         onlineStatus: entity.isOnline,
+  //         isOnline: entity.isOnline,
+  //       ),
+  //     );
+  //
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text(
+  //           entity.isOnline ? 'تم تفعيل حالتك بنجاح' : 'تم إلغاء تفعيل حالتك',
+  //           style: const TextStyle(color: Colors.white),
+  //         ),
+  //         backgroundColor: Colors.green,
+  //         duration: const Duration(seconds: 2),
+  //       ),
+  //     );
+  //   } catch (e) {
+  //     Navigator.of(context).pop();
+  //     log('Failed to update status: $e');
+  //
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: const Text(
+  //           'فشل في تحديث حالتك',
+  //           style: TextStyle(color: Colors.white),
+  //         ),
+  //         backgroundColor: Colors.red,
+  //         duration: const Duration(seconds: 3),
+  //         action: SnackBarAction(
+  //           label: 'إعادة المحاولة',
+  //           textColor: Colors.white,
+  //           onPressed: () {
+  //             toggleOnlineStatus(value);
+  //           },
+  //         ),
+  //       ),
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -143,15 +143,15 @@ class _SettingsCardState extends State<SettingsCard> {
             },
           ),
 
-          CustomListTile(
-            icon: Icons.change_circle,
-            title: AppLocalizations.of(context)!.ChangeWorkStatus,
-            isActive: true,
-            switchValue: isOnline, // ✅ تكفي واحدة بس
-            onStatusChanged: (value) {
-              toggleOnlineStatus(value);
-            },
-          ),
+          // CustomListTile(
+          //   icon: Icons.change_circle,
+          //   title: AppLocalizations.of(context)!.ChangeWorkStatus,
+          //   isActive: true,
+          //   switchValue: isOnline, // ✅ تكفي واحدة بس
+          //   onStatusChanged: (value) {
+          //     toggleOnlineStatus(value);
+          //   },
+          // ),
 
           CustomListTile(
             icon: Icons.policy,

@@ -12,6 +12,7 @@ class RequestMapper {
   static RequestEntity mapRequest(MyRequestModel model) {
     return RequestEntity(
       id: model.id,
+      previousDriverName: model.previousDriverName,
       currentStatus: model.currentStatus,
       currentStatusTypes: model.currentStatusTypes,
       status: model.status,

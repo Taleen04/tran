@@ -34,6 +34,7 @@ class RequestEntity {
   final double? estimatedDistance;
   final double? estimatedDuration;
   final List<int> driverIds;
+  final String previousDriverName;
 
 
   RequestEntity({
@@ -41,6 +42,7 @@ class RequestEntity {
     required this.status,
     required this.client,
     required this.origin,
+    required this.previousDriverName,
     required this.destination,
     required this.vehicleType,
     required this.passengers,

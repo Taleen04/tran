@@ -1,5 +1,6 @@
 import 'package:ai_transport/src/core/constants/app_colors.dart';
 import 'package:ai_transport/src/core/constants/app_text_styling.dart';
+import 'package:ai_transport/src/core/generated/l10n/app_localizations.dart';
 import 'package:ai_transport/src/core/utils/responsive_size_helper.dart';
 import 'package:ai_transport/src/feature/auth/presentaion/widgets/password_field.dart';
 import 'package:ai_transport/src/feature/profile/data/data_source/change_password_data_source.dart';
@@ -53,12 +54,12 @@ class ChangePassword extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "إعادة تعيين كلمة المرور",
+                       AppLocalizations.of(context)!.changePassword,
                         style: AppTextStyling.font26W500TextInter,
                       ),
                       SizedBox(height: responsiveHeight(context, 40)),
                       Text(
-                        "يجب أن تحتوي كلمة المرور على مجموعة من الأرقام والأحرف والرموز الخاصة",
+                        AppLocalizations.of(context)!.thePasswordMustContainACombinationOfNumbersLettersandSpecialSymbols,
                         style: AppTextStyling.font14W500TextInter.copyWith(
                           color: AppColors.grey,
                         ),
@@ -66,9 +67,9 @@ class ChangePassword extends StatelessWidget {
                       ),
                       SizedBox(height: responsiveHeight(context, 50)),
 
-                      PasswordField( controller: currentPasswordController, text: 'كلمة المرور الحالية'),
+                      PasswordField( controller: currentPasswordController, text: AppLocalizations.of(context)!.currentPassword),
                       SizedBox(height: responsiveHeight(context, 20)),
-                      PasswordField( controller: newPasswordController, text: 'كلمة المرور الجديدة'),
+                      PasswordField( controller: newPasswordController, text: AppLocalizations.of(context)!.newPassword),
                     ],
                   ),
                 ),
@@ -107,7 +108,7 @@ class ChangePassword extends StatelessWidget {
                     ),
                     child: isLoading
                         ? const CircularProgressIndicator(color: Colors.white)
-                        : Text("إعادة تعيين", style: AppTextStyling.font14W500TextInter),
+                        : Text(AppLocalizations.of(context)!.changePassword, style: AppTextStyling.font14W500TextInter),
                   ),
                 ),
               ),
